@@ -1,0 +1,92 @@
+#!/bin/bash
+
+############################################################################################
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Kernel Source:
+# Clone the kernel source from LineageOS:
+# git clone https://github.com/LineageOS/android_kernel_xiaomi_sm6250 -b lineage-21
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+############################################################################################
+
+##############################################
+# Toolchains
+# Visit https://kali.download/nethunter-images/toolchains/ for more information
+##############################################
+
+# Set architecture (arm or arm64)
+export ARCH=arm64
+export SUBARCH=$ARCH
+TD="/usr"
+
+# Clang Configuration
+# Uncomment the following lines if you plan to use Clang instead of GCC.
+# unset CLANG_ROOT
+# unset CLANG_PATH
+# unset LD_LIBRARY_PATH
+# unset CLANG_TRIPLE
+# unset CC
+# unset CLANG_SRC
+
+# Function to install the recommended arm compiler (32-bit)
+function install_toolchain_arm() {
+    if ! dpkg -s gcc-arm-linux-gnueabi &>/dev/null; then
+        echo "[ INFO ] Installing gcc-arm-linux-gnueabi..."
+        sudo apt install -y gcc-arm-linux-gnueabi
+    else
+        echo "[ INFO ] gcc-arm-linux-gnueabi is already installed."
+    fi
+}
+
+# Function to install the recommended arm64 compiler (64-bit)
+function install_toolchain_arm64() {
+    if ! dpkg -s gcc-aarch64-linux-gnu &>/dev/null; then
+        echo "[ INFO ] Installing gcc-aarch64-linux-gnu..."
+        sudo apt install -y gcc-aarch64-linux-gnu
+    else
+        echo "[ INFO ] gcc-aarch64-linux-gnu is already installed."
+    fi
+}
+
+# Set paths for libraries and binaries
+export GCC_BIN32="${TD}/bin"
+export GCC_LIB32="${TD}/lib/arm-linux-gnueabi"
+export GCC_BIN64="${TD}/bin"
+export GCC_LIB64="${TD}/lib/aarch64-linux-gnu"
+export LD_LIBRARY_PATH="${GCC_LIB64}:${GCC_LIB32}:${LD_LIBRARY_PATH}"
+export PATH="${GCC_BIN64}:${GCC_BIN32}:${PATH}"
+export CROSS_COMPILE=aarch64-linux-gnu-
+export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+export CC=gcc
+
+# Install toolchains
+install_toolchain_arm
+install_toolchain_arm64
+
+# Additional compiler arguments
+export DTC_EXT="$(command -v dtc)"
+MAKE_ARGS="DTC_EXT=${DTC_EXT}"
+
+# Enable ccache if available for faster builds
+if command -v ccache &>/dev/null; then
+    export CC="ccache ${CROSS_COMPILE}gcc"
+    echo "[ INFO ] ccache is enabled for faster builds."
+else
+    echo "[ INFO ] ccache not found; using standard compilation."
+fi
+
+# Set the kernel local version name
+export LOCALVERSION=kali-miatoll
+
+# Option to ignore errors for mismatched configurations
+# Uncomment the line below if necessary.
+# MAKE_ARGS="CONFIG_NO_ERROR_ON_MISMATCH=y"
+
+# Prepare for the build process
+echo "[ INFO ] Setup complete. You can now proceed with the kernel build."
+
+# Build commands
+export ARCH=arm64
+export CROSS_COMPILE=aarch64-linux-gnu-
+
+make O=out ARCH=arm64 vendor/xiaomi/miatoll_defconfig
+make O=out ARCH=arm64 DTC_EXT="$(command -v dtc)" -j$(nproc)
