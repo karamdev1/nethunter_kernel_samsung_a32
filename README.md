@@ -8,7 +8,6 @@ This kernel is based on:
 - USB OTG support
 - USB HID (Not Tested)
 - WiFi monitor mode & injection (external USB adapters only)
-- Modular driver support via /lib/modules
 
 ## Disclaimer
 This kernel is **unofficial** and provided for **educational and security research purposes only**.  
@@ -29,8 +28,7 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 ## Notes
 - WiFi drivers are **not integrated** into the kernel.
 - Users must compile and load external USB WiFi drivers as kernel modules.
-- Modules are stored in `/lib/modules/` and can be managed using the NetHunter app.
-- SELinux is enforcing by default.
+- Modules can be stored anywhere and can be managed using the NetHunter app.
 
 ## Compile a driver as module against the kernel
 A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
