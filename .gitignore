@@ -1,3 +1,18 @@
 out/
 arch/arm64/boot/Image
 modules/
+
+# Untracked working directories
+./kali-nethunter-kernel-builder/modules_out
+./kali-nethunter-kernel-builder/nethunter
+./kali-nethunter-kernel-builder/out
+./kali-nethunter-kernel-builder/output
+./kali-nethunter-kernel-builder/toolchain_archs
+
+./kali-nethunter-kernel-builder/anykernel3/modules
+
+
+# Untracked files:
+./kali-nethunter-kernel-builder/anykernel3/Image*
+./kali-nethunter-kernel-builder/anykernel3/*dtb*
+./kali-nethunter-kernel-builder/anykernel3/Changelog.txt
