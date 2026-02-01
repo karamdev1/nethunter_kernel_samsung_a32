@@ -1,0 +1,54 @@
+## NetHunter Kernel for Samsung Galaxy A32 (SM-A325F)
+This kernel is based on:
+- [Samsung Galaxy A32 Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_a32/tree/bpf-5.10-phoenix)
+
+## Features
+- Kali NetHunter Patches
+- SELinux disabled (boot parameter controlled) (when disabled it just shows its Enforcing)
+- USB OTG support
+- USB HID (Not Tested)
+- WiFi monitor mode & injection (external USB adapters only)
+- Modular driver support via /lib/modules
+
+## Disclaimer
+This kernel is **unofficial** and provided for **educational and security research purposes only**.  
+I am not responsible for any damage, data loss, or misuse.
+
+This project is **not affiliated** with Offensive Security or Kali NetHunter.
+
+## Supported
+- Device: Samsung Galaxy A32 (SM-A325F)
+- SoC: MediaTek MT6769
+- Android: One UI 5.1 (Android 13)
+- Bootloader: Unlocked
+
+## Requirements to Flash
+- Samsung Galaxy A32 (SM-A325F)
+- Custom recovery (TWRP recommended) - [TWRP Download](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
+
+## Notes
+- WiFi drivers are **not integrated** into the kernel.
+- Users must compile and load external USB WiFi drivers as kernel modules.
+- Modules are stored in `/lib/modules/` and can be managed using the NetHunter app.
+- SELinux is enforcing by default.
+
+## Compiling
+A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
+Windows Subsystem for Linux (WSL) is **not supported**.
+
+### 1. Install dependencies
+```
+sudo apt update && sudo apt install -y git build-essential bc flex bison libssl-dev libelf-dev \
+device-tree-compiler lz4 xz-utils zlib1g-dev libncurses-dev pahole python3 python-is-python3 \
+openjdk-17-jdk rsync cpio kmod zstd
+```
+
+### 2. Clone ZyC Clang Toolchain
+```
+git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang
+```
+
+### 3. Clean & Build the kernel
+```
+./clean_kernel.sh & ./build_kernel.sh
+```

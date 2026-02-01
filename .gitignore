@@ -1,0 +1,3 @@
+out/
+arch/arm64/boot/Image
+modules/
