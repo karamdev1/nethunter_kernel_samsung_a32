@@ -32,11 +32,9 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 - Modules are stored in `/lib/modules/` and can be managed using the NetHunter app.
 - SELinux is enforcing by default.
 
-## Compiling
+## Compile a driver as module against the kernel
 A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
 Windows Subsystem for Linux (WSL) is **not supported**.
-
-And if you're here to compile a driver against the kernel, Please use the defconfig I made __a32_nethunter_defconfig__
 
 ### 1. Install dependencies
 ```
@@ -50,7 +48,31 @@ openjdk-17-jdk rsync cpio kmod zstd
 git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang
 ```
 
-### 3. Clean & Build the kernel
+### 3. Clean & Prepare Modules (Cleaning is required)
 ```
-./clean_kernel.sh & ./build_kernel.sh
+./clean_kernel.sh & ./module_prepare.sh
+```
+
+### 4. Compile the driver as module against the kernel
+Enjoy.
+
+## Compiling the kernel
+A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
+Windows Subsystem for Linux (WSL) is **not supported**.
+
+### 1. Install dependencies
+```
+sudo apt update && sudo apt install -y git build-essential bc flex bison libssl-dev libelf-dev \
+device-tree-compiler lz4 xz-utils zlib1g-dev libncurses-dev pahole python3 python-is-python3 \
+openjdk-17-jdk rsync cpio kmod zstd
+```
+
+### 2. Clone ZyC Clang Toolchain
+```
+git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang
+```
+
+### 3. Clean, Compile Modules & Build the kernel
+```
+./clean_kernel.sh & ./module_prepare.sh & ./build_kernel.sh
 ```
