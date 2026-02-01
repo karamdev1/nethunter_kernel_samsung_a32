@@ -26,17 +26,9 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 - Custom recovery (TWRP recommended) - [TWRP Download](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
 
 ## Notes
-- Not all WiFi drivers are **integrated** into the kernel (For seeing whats integrated check the **WiFi Drivers Integrated** Section).
+- WiFi drivers are **not integrated** into the kernel.
 - Users must compile and load external USB WiFi drivers as kernel modules.
 - Modules can be stored anywhere and can be managed using the NetHunter app.
-
-## WiFi Drivers Integrated (With monitor and injection support)
-Theres alot others I cant list them all if your curious check the defconfig **a32_nethunter_defconfig**
-
-### Realtek
-- **RTL8188E/F, RTL8192E, RTL8703B, RTL8710B**
-- **RTL8723B/D, RTL8812AU, RTL8814AU, RTL8821CU/CE/CS**
-- **RTL8822BE/B/BS/BU**
 
 ## Compile a driver as module against the kernel
 A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
