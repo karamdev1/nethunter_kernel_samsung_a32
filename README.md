@@ -36,6 +36,8 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
 Windows Subsystem for Linux (WSL) is **not supported**.
 
+And if you're here to compile a driver against the kernel, Please use the defconfig I made __a32_nethunter_defconfig__
+
 ### 1. Install dependencies
 ```
 sudo apt update && sudo apt install -y git build-essential bc flex bison libssl-dev libelf-dev \
