@@ -2,7 +2,7 @@
 VERSION = 4
 PATCHLEVEL = 14
 SUBLEVEL = 356
-EXTRAVERSION = -vigus-newBpfnewPhoneSirr💩
+EXTRAVERSION = -Karam-NetHunter-v1
 NAME = Petit Gorille
 
 # *DOCUMENTATION*
