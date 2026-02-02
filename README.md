@@ -1,4 +1,4 @@
-## NetHunter Kernel for Samsung Galaxy A32 (SM-A325F)
+## NetHunter Kernel v2 for Samsung Galaxy A32 (SM-A325F)
 This kernel is based on:
 - [Samsung Galaxy A32 Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_a32/tree/bpf-5.10-phoenix)
 
@@ -31,11 +31,9 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 - Modules can be stored anywhere and can be managed using the NetHunter app.
 
 ## WiFi Drivers Integrated
-If you didnt find your WiFi Adapter SoC Driver
-Unfortunately you'll need to compile it as module
-
-### Realtek
-  - **RTL8703B, RTL8812A, RTL8814A, RTL8821A/CS/CU, RTL8822BE/BS/BU**
+If you didnt find your **WiFi Adapter SoC** Driver, Unfortunately you'll need to compile it as **module**
+  ### Realtek
+    - **RTL8703B, RTL8812A, RTL8814A, RTL8821A/CS/CU, RTL8822BE/BS/BU**
 
 ## Compile a driver as module against the kernel
 A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
