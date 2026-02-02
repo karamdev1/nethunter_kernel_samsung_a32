@@ -30,10 +30,10 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 - Users must compile and load external USB WiFi drivers as kernel modules.
 - Modules can be stored anywhere and can be managed using the NetHunter app.
 
-## WiFi Drivers Integrated
 If you didnt find your **WiFi Adapter SoC** Driver, Unfortunately you'll need to compile it as **module**
-  ### Realtek
-    - **RTL8703B, RTL8812A, RTL8814A, RTL8821A/CS/CU, RTL8822BE/BS/BU**
+## WiFi Drivers Integrated
+### Realtek
+  - **RTL8703B, RTL8812A, RTL8814A, RTL8821A/CS/CU, RTL8822BE/BS/BU**
 
 ## Compile a driver as module against the kernel
 A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
