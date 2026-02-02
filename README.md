@@ -18,7 +18,7 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 ## Supported
 - Device: Samsung Galaxy A32 (SM-A325F)
 - SoC: MediaTek MT6769
-- Android: One UI 5.1 (Android 13)
+- Android: One UI 5.1 (Android 13), One UI 6,7 and 8 Ports
 - Bootloader: Unlocked
 
 ## Requirements to Flash
