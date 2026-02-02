@@ -26,9 +26,7 @@ CONFIG_RTL8814A = y
 CONFIG_RTL8821A = y
 CONFIG_RTL8821CS = y
 CONFIG_RTL8821CU = y
-CONFIG_RTL8822BE = y
-CONFIG_RTL8822BS = y
-CONFIG_RTL8822Bu = y
+CONFIG_RTL8822BU = y
 ######################### Interface ###########################
 CONFIG_USB_HCI = y
 ########################### Android ###########################
