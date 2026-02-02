@@ -33,7 +33,7 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 If you didnt find your **WiFi Adapter SoC** Driver, Unfortunately you'll need to compile it as **module**
 ## WiFi Drivers Integrated
 ### Realtek (Only RTL8821CU Tested)
-  - **RTL8703B, RTL8812A, RTL8814A, RTL8821A/CS/CU, RTL8822BU**
+  - **RTL8703B, RTL8812A, RTL8814A, RTL8821CU**
 
 ## Compile a driver as module against the kernel
 A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
