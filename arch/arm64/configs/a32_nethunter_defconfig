@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 4.14.356-Karam-NetHunter-v1 Kernel Configuration
+# Linux/arm64 4.14.356-Karam-NetHunter-v2 Kernel Configuration
 #
 CONFIG_ARM64=y
 CONFIG_64BIT=y
@@ -2334,7 +2334,7 @@ CONFIG_WLAN_VENDOR_REALTEK=y
 CONFIG_RTL_CARDS=y
 # CONFIG_RTL8192CU is not set
 # CONFIG_RTL8XXXU is not set
-CONFIG_88XXAU=y
+CONFIG_88XXAU=m
 CONFIG_WLAN_VENDOR_RSI=y
 # CONFIG_RSI_91X is not set
 CONFIG_WLAN_VENDOR_ST=y
