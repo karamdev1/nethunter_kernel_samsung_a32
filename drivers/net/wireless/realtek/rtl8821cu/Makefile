@@ -67,7 +67,7 @@ CONFIG_RTL8723D = n
 CONFIG_RTL8821C = y
 CONFIG_RTL8710B = n
 CONFIG_RTL8192F = n
-CONFIG_RTL8822C = y
+CONFIG_RTL8822C = n
 CONFIG_RTL8814B = n
 CONFIG_RTL8723F = n
 ######################### Interface ###########################
