@@ -26,7 +26,7 @@
 
 #include "mtu3.h"
 #include "mtu3_dr.h"
-#include <mtk_sloa_fs.h>
+//#include <mtk_sloa_fs.h>
 
 #ifdef CONFIG_MTK_USB2JTAG_SUPPORT
 #include <mtk_usb2jtag.h>
