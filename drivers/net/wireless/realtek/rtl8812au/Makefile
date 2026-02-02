@@ -20,22 +20,13 @@ EXTRA_CFLAGS += -I$(src)/include
 EXTRA_LDFLAGS += --strip-debug
 
 ########################## WIFI IC ############################
-CONFIG_RTL8188E = y
-CONFIG_RTL8188F = y
-CONFIG_RTL8192E = y
-CONFIG_RTL8192F = y
 CONFIG_RTL8703B = y
-CONFIG_RTL8710B = y
-CONFIG_RTL8723B = y
-CONFIG_RTL8723D = y
 CONFIG_RTL8812A = y
 CONFIG_RTL8814A = y
 CONFIG_RTL8821A = y
-CONFIG_RTL8821C = y
 CONFIG_RTL8821CS = y
 CONFIG_RTL8821CU = y
 CONFIG_RTL8822BE = y
-CONFIG_RTL8822B = y
 CONFIG_RTL8822BS = y
 CONFIG_RTL8822Bu = y
 ######################### Interface ###########################
