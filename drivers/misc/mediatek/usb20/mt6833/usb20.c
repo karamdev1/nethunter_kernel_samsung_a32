@@ -24,9 +24,6 @@
 #include "musbhsdma.h"
 #include "usb20.h"
 
-#include "musb.h"
-extern struct musb *g_musb;
-
 #include <mt-plat/mtk_boot_common.h>
 #include <mt-plat/charger_type.h>
 #if defined(CONFIG_BATTERY_SAMSUNG)
@@ -61,27 +58,8 @@ extern struct musb *g_musb;
 #include <linux/soc/mediatek/mtk_sip_svc.h>
 static void usb_dpidle_request(int mode)
 {
-	if (g_musb && g_musb->gadget_driver) {
-		pr_info("[PATCH] usb_dpidle_request skipped because gadget active\n");
-		return;
-	}
-
-	struct arm_smccc_res res;
-	int op;
-
-	switch (mode) {
-	case USB_DPIDLE_SUSPEND:
-		op = MTK_USB_SMC_INFRA_REQUEST;
-		break;
-	case USB_DPIDLE_RESUME:
-		op = MTK_USB_SMC_INFRA_RELEASE;
-		break;
-	default:
-		return;
-	}
-
-	DBG(0, "operatio = %d\n", op);
-	arm_smccc_smc(MTK_SIP_USB_CONTROL, op, 0, 0, 0, 0, 0, 0, &res);
+	pr_info("[PATCH] usb_dpidle_request skipped because gadget active\n");
+	return;
 }
 #endif
 
