@@ -105,12 +105,6 @@ static void usb_dpidle_request(int mode)
 	/* update dpidle_status */
 	dpidle_status = mode;
 
-	if (g_musb && g_musb->gadget_driver) {
-		pr_info("[PATCH] usb_dpidle_request skipped because gadget active\n");
-		spin_unlock_irqrestore(&usb_hal_dpidle_lock, flags);
-		return;
-	}
-
 	switch (mode) {
 	case USB_DPIDLE_ALLOWED:
 		spm_resource_req(SPM_RESOURCE_USER_SSUSB, SPM_RESOURCE_RELEASE);
