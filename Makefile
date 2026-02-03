@@ -2,7 +2,7 @@
 VERSION = 4
 PATCHLEVEL = 14
 SUBLEVEL = 356
-EXTRAVERSION = -Karam-NetHunter-v2
+EXTRAVERSION = -Karam-NetHunter-v2.1
 NAME = Petit Gorille
 
 # *DOCUMENTATION*
