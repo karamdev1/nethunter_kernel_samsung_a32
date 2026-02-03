@@ -6,8 +6,11 @@ This kernel is based on:
 - Kali NetHunter Patches
 - SELinux disabled (boot parameter controlled) (when disabled it just shows its Enforcing)
 - USB OTG support
-- USB HID (Not Tested)
 - WiFi monitor mode & injection (external USB adapters only)
+
+## Bugs
+- USB HID (not working)
+- Internal & External BT (not working)
 
 ## Disclaimer
 This kernel is **unofficial** and provided for **educational and security research purposes only**.  
@@ -18,7 +21,7 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 ## Supported
 - Device: Samsung Galaxy A32 (SM-A325F)
 - SoC: MediaTek MT6769
-- Android: One UI 5.1 (Android 13), One UI 6,7 and 8 Ports
+- Android: One UI 5.1 (Android 13 Tested), One UI 6,7 and 8 Ports (Android 14,15 and 16 not tested)
 - Bootloader: Unlocked
 
 ## Requirements to Flash
