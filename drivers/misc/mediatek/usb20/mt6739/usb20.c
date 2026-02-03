@@ -22,7 +22,8 @@
 #include "musbhsdma.h"
 #include "usb20.h"
 
-extern struct mtk_musb *g_musb;
+#include "musb.h"
+extern struct musb *g_musb;
 
 #include <mt-plat/mtk_boot_common.h>
 #include <mt-plat/charger_type.h>
