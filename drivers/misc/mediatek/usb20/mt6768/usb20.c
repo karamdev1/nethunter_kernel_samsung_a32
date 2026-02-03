@@ -98,8 +98,16 @@ static void issue_dpidle_timer(void)
 
 static void usb_dpidle_request(int mode)
 {
-	pr_info("[PATCH] usb_dpidle_request skipped because gadget active\n");
-	return;
+	unsigned long flags;
+
+	spin_lock_irqsave(&usb_hal_dpidle_lock, flags);
+
+	dpidle_status = USB_DPIDLE_FORBIDDEN;
+
+        /* Always force FORBIDDEN to keep USB alive */
+        spm_resource_req(SPM_RESOURCE_USER_SSUSB, SPM_RESOURCE_ALL);
+
+	spin_unlock_irqrestore(&usb_hal_dpidle_lock, flags);
 }
 #endif
 
