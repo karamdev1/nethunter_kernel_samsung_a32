@@ -20,6 +20,8 @@ export KCFLAGS=' -w -pipe -O3'
 export KCPPFLAGS=' -O3'
 export CONFIG_SECTION_MISMATCH_WARN_ONLY=y
 
+make -s -C $(pwd) O=$(pwd)/out KCFLAGS=' -w -pipe -O3' CONFIG_SECTION_MISMATCH_WARN_ONLY=y clean -j$(nproc) && make -s -C $(pwd) O=$(pwd)/out KCFLAGS='-w -O3' CONFIG_SECTION_MISMATCH_WARN_ONLY=y mrproper -j$(nproc)
+make -C $(pwd) O=$(pwd)/out KCFLAGS=' -w -pipe -O3' CONFIG_SECTION_MISMATCH_WARN_ONLY=y -j$(nproc) a32_nethunter_defconfig
 make -s -C $(pwd) O=$(pwd)/out KCFLAGS=' -w -pipe -O3' CONFIG_SECTION_MISMATCH_WARN_ONLY=y -j$(nproc)
 
 cp out/arch/arm64/boot/Image $(pwd)/arch/arm64/boot/Image

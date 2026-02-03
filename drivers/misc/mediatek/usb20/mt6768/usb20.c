@@ -1027,7 +1027,7 @@ static ssize_t mt_usb_store_saving_mode(struct device *dev,
 					const char *buf, size_t count)
 {
 	pr_info("Force disable USB saving mode\n");
-    	return 0; // DO NOTHING
+    	return count;
 }
 
 bool is_saving_mode(void)
