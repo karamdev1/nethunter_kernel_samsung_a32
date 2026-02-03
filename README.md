@@ -1,4 +1,4 @@
-## NetHunter Kernel v2 for Samsung Galaxy A32 (SM-A325F)
+## NetHunter Kernel v2.1 for Samsung Galaxy A32 (SM-A325F)
 This kernel is based on:
 - [Samsung Galaxy A32 Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_a32/tree/bpf-5.10-phoenix)
 
