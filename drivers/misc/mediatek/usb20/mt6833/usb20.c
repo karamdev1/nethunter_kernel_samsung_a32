@@ -58,8 +58,27 @@
 #include <linux/soc/mediatek/mtk_sip_svc.h>
 static void usb_dpidle_request(int mode)
 {
-	pr_info("[PATCH] usb_dpidle_request skipped because gadget active\n");
-	return;
+	if (g_musb && g_musb->gadget_driver) {
+		pr_info("[PATCH] usb_dpidle_request skipped because gadget active\n");
+		return;
+	}
+
+	struct arm_smccc_res res;
+	int op;
+
+	switch (mode) {
+	case USB_DPIDLE_SUSPEND:
+		op = MTK_USB_SMC_INFRA_REQUEST;
+		break;
+	case USB_DPIDLE_RESUME:
+		op = MTK_USB_SMC_INFRA_RELEASE;
+		break;
+	default:
+		return;
+	}
+
+	DBG(0, "operatio = %d\n", op);
+	arm_smccc_smc(MTK_SIP_USB_CONTROL, op, 0, 0, 0, 0, 0, 0, &res);
 }
 #endif
 

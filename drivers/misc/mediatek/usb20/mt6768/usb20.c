@@ -102,10 +102,59 @@ static void usb_dpidle_request(int mode)
 
 	spin_lock_irqsave(&usb_hal_dpidle_lock, flags);
 
-	dpidle_status = USB_DPIDLE_FORBIDDEN;
+	/* update dpidle_status */
+	dpidle_status = mode;
 
-        /* Always force FORBIDDEN to keep USB alive */
-        spm_resource_req(SPM_RESOURCE_USER_SSUSB, SPM_RESOURCE_ALL);
+	if (g_musb && g_musb->gadget_driver) {
+		pr_info("[PATCH] usb_dpidle_request skipped because gadget active\n");
+		spin_unlock_irqrestore(&usb_hal_dpidle_lock, flags);
+		return;
+	}
+
+	switch (mode) {
+	case USB_DPIDLE_ALLOWED:
+		spm_resource_req(SPM_RESOURCE_USER_SSUSB, SPM_RESOURCE_RELEASE);
+		if (likely(!dpidle_debug))
+			DBG_LIMIT(1, "USB_DPIDLE_ALLOWED");
+		else
+			DBG(0, "USB_DPIDLE_ALLOWED\n");
+		break;
+	case USB_DPIDLE_FORBIDDEN:
+		spm_resource_req(SPM_RESOURCE_USER_SSUSB, SPM_RESOURCE_ALL);
+		if (likely(!dpidle_debug))
+			DBG_LIMIT(1, "USB_DPIDLE_FORBIDDEN");
+		else
+			DBG(0, "USB_DPIDLE_FORBIDDEN\n");
+		break;
+	case USB_DPIDLE_SRAM:
+		spm_resource_req(SPM_RESOURCE_USER_SSUSB,
+				SPM_RESOURCE_CK_26M | SPM_RESOURCE_MAINPLL);
+		if (likely(!dpidle_debug))
+			DBG_LIMIT(1, "USB_DPIDLE_SRAM");
+		else
+			DBG(0, "USB_DPIDLE_SRAM\n");
+		break;
+	case USB_DPIDLE_TIMER:
+		spm_resource_req(SPM_RESOURCE_USER_SSUSB,
+				SPM_RESOURCE_CK_26M | SPM_RESOURCE_MAINPLL);
+		DBG(0, "USB_DPIDLE_TIMER\n");
+		issue_dpidle_timer();
+		break;
+	case USB_DPIDLE_SUSPEND:
+		spm_resource_req(SPM_RESOURCE_USER_SSUSB,
+			SPM_RESOURCE_MAINPLL | SPM_RESOURCE_CK_26M |
+			SPM_RESOURCE_AXI_BUS);
+		DBG(0, "DPIDLE_SUSPEND\n");
+		break;
+	case USB_DPIDLE_RESUME:
+		spm_resource_req(SPM_RESOURCE_USER_SSUSB,
+			SPM_RESOURCE_RELEASE);
+		DBG(0, "DPIDLE_RESUME\n");
+		break;
+	default:
+		DBG(0, "[ERROR] Are you kidding!?!?\n");
+		break;
+	}
 
 	spin_unlock_irqrestore(&usb_hal_dpidle_lock, flags);
 }
