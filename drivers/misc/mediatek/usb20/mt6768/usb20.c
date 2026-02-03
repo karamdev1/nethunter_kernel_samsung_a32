@@ -1069,20 +1069,8 @@ static ssize_t mt_usb_store_saving_mode(struct device *dev,
 					struct device_attribute *attr,
 					const char *buf, size_t count)
 {
-	int saving;
-	long tmp_val;
-
-	if (!dev) {
-		DBG(0, "dev is null!!\n");
-		return count;
-	/* } else if (1 == sscanf(buf, "%d", &saving)) { */
-	} else if (kstrtol(buf, 10, (long *)&tmp_val) == 0) {
-		saving = tmp_val;
-		DBG(0, "old=%d new=%d\n", saving, saving_mode);
-		if (saving_mode == (!saving))
-			saving_mode = !saving_mode;
-	}
-	return count;
+	pr_info("Force disable USB saving mode\n");
+    	return; // DO NOTHING
 }
 
 bool is_saving_mode(void)
