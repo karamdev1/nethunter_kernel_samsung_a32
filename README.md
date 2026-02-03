@@ -10,7 +10,7 @@ This kernel is based on:
 
 ## Bugs
 - USB HID (not working)
-- Internal & External BT (not working)
+- Internal & External BT (not working when you want to use it as attack)
 
 ## Disclaimer
 This kernel is **unofficial** and provided for **educational and security research purposes only**.  
