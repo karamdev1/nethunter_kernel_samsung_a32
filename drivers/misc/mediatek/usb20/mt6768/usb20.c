@@ -24,6 +24,8 @@
 #include "musbhsdma.h"
 #include "usb20.h"
 
+extern struct musb *g_musb;
+
 #include <mt-plat/mtk_boot_common.h>
 #include <mt-plat/charger_type.h>
 #if defined(CONFIG_BATTERY_SAMSUNG)
@@ -1076,7 +1078,7 @@ static ssize_t mt_usb_store_saving_mode(struct device *dev,
 					const char *buf, size_t count)
 {
 	pr_info("Force disable USB saving mode\n");
-    	return; // DO NOTHING
+    	return 0; // DO NOTHING
 }
 
 bool is_saving_mode(void)
