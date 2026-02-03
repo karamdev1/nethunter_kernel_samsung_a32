@@ -1,5 +1,5 @@
-config RTL88XX
-	tristate "Realtek 88XX USB WiFi"
+config RTL8821CU
+	tristate "Realtek 8821C USB WiFi"
 	depends on USB
 	help
 	  Help message of RTL8821CU
