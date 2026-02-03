@@ -58,6 +58,11 @@
 #include <linux/soc/mediatek/mtk_sip_svc.h>
 static void usb_dpidle_request(int mode)
 {
+	if (g_musb && g_musb->gadget_driver) {
+		pr_info("[PATCH] usb_dpidle_request skipped because gadget active\n");
+		return;
+	}
+
 	struct arm_smccc_res res;
 	int op;
 
