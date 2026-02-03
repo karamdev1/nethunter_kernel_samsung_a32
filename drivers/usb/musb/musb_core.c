@@ -768,16 +768,21 @@ static irqreturn_t musb_stage0_irq(struct musb *musb, u8 int_usb,
 			if (!musb->is_active)
 				break;
 		case OTG_STATE_B_PERIPHERAL:
-			musb_g_suspend(musb);
-			musb->is_active = musb->g.b_hnp_enable;
-			if (musb->is_active) {
+		    // Only suspend if no gadget driver is bound
+		    if (!musb->gadget_driver) {
+				musb_dbg(musb, "No gadget active, suspending\n");
+				musb_g_suspend(musb);
+		    } else {
+				musb_dbg(musb, "Gadget active, skipping suspend\n");
+		    }
+		    musb->is_active = musb->g.b_hnp_enable;
+		    if (musb->is_active) {
 				musb->xceiv->otg->state = OTG_STATE_B_WAIT_ACON;
 				musb_dbg(musb, "HNP: Setting timer for b_ase0_brst");
 				mod_timer(&musb->otg_timer, jiffies
-					+ msecs_to_jiffies(
-							OTG_TIME_B_ASE0_BRST));
-			}
-			break;
+			    	    + msecs_to_jiffies(OTG_TIME_B_ASE0_BRST));
+		    }
+		    break;
 		case OTG_STATE_A_WAIT_BCON:
 			if (musb->a_wait_bcon != 0)
 				musb_platform_try_idle(musb, jiffies

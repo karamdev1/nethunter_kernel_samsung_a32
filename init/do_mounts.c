@@ -67,6 +67,15 @@ static int __init readwrite(char *str)
 	return 1;
 }
 
+static int __init mount_configfs_early(void)
+{
+    int ret = sys_mount("none", "/sys/kernel/config", "configfs", 0, NULL);
+    if (ret)
+        pr_warn("Failed to mount configfs: %d\n", ret);
+    return 0;
+}
+late_initcall(mount_configfs_early);
+
 __setup("ro", readonly);
 __setup("rw", readwrite);
 
