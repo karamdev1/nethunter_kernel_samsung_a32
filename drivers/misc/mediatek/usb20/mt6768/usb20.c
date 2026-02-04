@@ -98,59 +98,21 @@ static void issue_dpidle_timer(void)
 
 static void usb_dpidle_request(int mode)
 {
-	unsigned long flags;
+    unsigned long flags;
 
-	spin_lock_irqsave(&usb_hal_dpidle_lock, flags);
+    spin_lock_irqsave(&usb_hal_dpidle_lock, flags);
 
-	/* update dpidle_status */
-	dpidle_status = mode;
+    /* override all modes: keep USB always fully powered */
+    dpidle_status = USB_DPIDLE_FORBIDDEN;  // pretend we forbade idle
 
-	switch (mode) {
-	case USB_DPIDLE_ALLOWED:
-		spm_resource_req(SPM_RESOURCE_USER_SSUSB, SPM_RESOURCE_RELEASE);
-		if (likely(!dpidle_debug))
-			DBG_LIMIT(1, "USB_DPIDLE_ALLOWED");
-		else
-			DBG(0, "USB_DPIDLE_ALLOWED\n");
-		break;
-	case USB_DPIDLE_FORBIDDEN:
-		spm_resource_req(SPM_RESOURCE_USER_SSUSB, SPM_RESOURCE_ALL);
-		if (likely(!dpidle_debug))
-			DBG_LIMIT(1, "USB_DPIDLE_FORBIDDEN");
-		else
-			DBG(0, "USB_DPIDLE_FORBIDDEN\n");
-		break;
-	case USB_DPIDLE_SRAM:
-		spm_resource_req(SPM_RESOURCE_USER_SSUSB,
-				SPM_RESOURCE_CK_26M | SPM_RESOURCE_MAINPLL);
-		if (likely(!dpidle_debug))
-			DBG_LIMIT(1, "USB_DPIDLE_SRAM");
-		else
-			DBG(0, "USB_DPIDLE_SRAM\n");
-		break;
-	case USB_DPIDLE_TIMER:
-		spm_resource_req(SPM_RESOURCE_USER_SSUSB,
-				SPM_RESOURCE_CK_26M | SPM_RESOURCE_MAINPLL);
-		DBG(0, "USB_DPIDLE_TIMER\n");
-		issue_dpidle_timer();
-		break;
-	case USB_DPIDLE_SUSPEND:
-		spm_resource_req(SPM_RESOURCE_USER_SSUSB,
-			SPM_RESOURCE_MAINPLL | SPM_RESOURCE_CK_26M |
-			SPM_RESOURCE_AXI_BUS);
-		DBG(0, "DPIDLE_SUSPEND\n");
-		break;
-	case USB_DPIDLE_RESUME:
-		spm_resource_req(SPM_RESOURCE_USER_SSUSB,
-			SPM_RESOURCE_RELEASE);
-		DBG(0, "DPIDLE_RESUME\n");
-		break;
-	default:
-		DBG(0, "[ERROR] Are you kidding!?!?\n");
-		break;
-	}
+    if (likely(!dpidle_debug))
+        DBG_LIMIT(1, "USB_DPIDLE_FORBIDDEN (patched)");
+    else
+        DBG(0, "USB_DPIDLE_FORBIDDEN (patched)\n");
 
-	spin_unlock_irqrestore(&usb_hal_dpidle_lock, flags);
+    /* skip the switch entirely, do not touch clocks or resources */
+
+    spin_unlock_irqrestore(&usb_hal_dpidle_lock, flags);
 }
 #endif
 
