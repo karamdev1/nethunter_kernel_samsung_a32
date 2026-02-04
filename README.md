@@ -1,4 +1,4 @@
-## NetHunter Kernel v2.1 for Samsung Galaxy A32 (SM-A325F)
+## NetHunter Kernel v3 for Samsung Galaxy A32 (SM-A325F)
 This kernel is based on:
 - [Samsung Galaxy A32 Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_a32/tree/bpf-5.10-phoenix)
 
@@ -35,9 +35,9 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 
 ## WiFi Drivers Integrated
 ### Realtek
-  - **RTL8821C**
+  - **RTL8812A, RTL8814A, RTL8821A, RTL8821C**
 
-## Compile a driver as module against the kernel
+## Compiling the kernel or a driver as module
 A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
 Windows Subsystem for Linux (WSL) is **not supported**.
 
@@ -53,31 +53,20 @@ openjdk-17-jdk rsync cpio kmod zstd
 git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang
 ```
 
-### 3. Clean & Prepare Modules (Cleaning is required)
+### 3. Clean Kernel
 ```
-./clean_kernel.sh & ./module_prepare.sh
-```
-
-### 4. Compile the driver as module against the kernel
-Enjoy.
-
-## Compiling the kernel
-A real Linux environment is required (Ubuntu 20.04 / 22.04 recommended).  
-Windows Subsystem for Linux (WSL) is **not supported**.
-
-### 1. Install dependencies
-```
-sudo apt update && sudo apt install -y git build-essential bc flex bison libssl-dev libelf-dev \
-device-tree-compiler lz4 xz-utils zlib1g-dev libncurses-dev pahole python3 python-is-python3 \
-openjdk-17-jdk rsync cpio kmod zstd
+./clean_kernel.sh
 ```
 
-### 2. Clone ZyC Clang Toolchain
+### 4. Build Kernel (Skip if you just don't want to compile the kernel)
 ```
-git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang
+./build_kernel.sh
 ```
 
-### 3. Clean, Compile Modules & Build the kernel
+### 5. Prepare & Compile Modules (Skip if you just want to compile the kernel)
 ```
-./clean_kernel.sh & ./module_prepare.sh & ./build_kernel.sh
+./module_prepare.sh
 ```
+
+### 6. Compile a driver as module against the kernel (Step 5. is required for having the headers)
+Please use the same **toolchain** I provided if you're going to compile the driver out of the tree
