@@ -2731,14 +2731,15 @@ void musb_g_suspend(struct musb *musb)
 			musb->xceiv->otg->state = OTG_STATE_B_PERIPHERAL;
 		break;
 	case OTG_STATE_B_PERIPHERAL:
-		musb->is_suspended = 0;
-		if (musb->gadget_driver && musb->gadget_driver->suspend) {
+	        // Keep gadget active but mark not actually asleep
+	        if (musb->gadget_driver && musb->gadget_driver->suspend) {
 			spin_unlock(&musb->lock);
-			#musb->gadget_driver->suspend(&musb->g);
+			// Skip deep suspend actions inside the driver
 			spin_lock(&musb->lock);
-		}
-		musb_sync_with_bat(musb, USB_SUSPEND);	/* announce to the battery */
-		break;
+	    	}
+	    	musb->is_suspended = 0; // pretend not suspended, but don't break OTG
+	    	musb_sync_with_bat(musb, USB_RESUME); // tell battery device is active
+	    	break;
 	default:
 		/* REVISIT if B_HOST, clear DEVCTL.HOSTREQ;
 		 * A_PERIPHERAL may need care too
