@@ -2723,7 +2723,6 @@ void musb_g_suspend(struct musb *musb)
     u8 devctl;
 
     devctl = musb_readb(musb->mregs, MUSB_DEVCTL);
-    musb_dbg(musb, "musb_g_suspend: devctl %02x", devctl);
 
     // Ignore all suspend states
     musb->is_suspended = 0;   // force not suspended
