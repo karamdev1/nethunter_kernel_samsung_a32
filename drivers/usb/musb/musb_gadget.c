@@ -2034,7 +2034,6 @@ void musb_g_suspend(struct musb *musb)
         break;
     case OTG_STATE_B_PERIPHERAL:
         // skip gadget suspend entirely
-        musb_dbg(musb, "Skipping gadget suspend in B_PERIPHERAL\n");
         break;
     default:
         WARNING("unhandled SUSPEND transition (%s)",
