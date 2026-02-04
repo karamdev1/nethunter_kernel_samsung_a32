@@ -2105,25 +2105,32 @@ void musb_g_resume(struct musb *musb)
 /* called when SOF packets stop for 3+ msec */
 void musb_g_suspend(struct musb *musb)
 {
-    u8 devctl;
+	u32 devctl;
 
-    devctl = musb_readb(musb->mregs, MUSB_DEVCTL);
+	devctl = os_readl(U3D_DEVICE_CONTROL);
+	dev_notice(musb->controller, "devctl %02x\n", devctl);
 
-    // Ignore all suspend states
-    musb->is_suspended = 0;   // force not suspended
-
-    switch (musb->xceiv->otg->state) {
-    case OTG_STATE_B_IDLE:
-        if ((devctl & MUSB_DEVCTL_VBUS) == MUSB_DEVCTL_VBUS)
-            musb->xceiv->otg->state = OTG_STATE_B_PERIPHERAL;
-        break;
-    case OTG_STATE_B_PERIPHERAL:
-        // skip gadget suspend entirely
-        break;
-    default:
-        WARNING("unhandled SUSPEND transition (%s)",
-                usb_otg_state_string(musb->xceiv->otg->state));
-    }
+	switch (musb->xceiv->otg->state) {
+	case OTG_STATE_B_IDLE:
+		if ((devctl & USB_DEVCTL_VBUSMASK) == USB_DEVCTL_VBUSVALID)
+			musb->xceiv->otg->state = OTG_STATE_B_PERIPHERAL;
+		break;
+	case OTG_STATE_B_PERIPHERAL:
+		musb->is_suspended = 0;
+		if (musb->gadget_driver && musb->gadget_driver->suspend) {
+			spin_unlock(&musb->lock);
+			#musb->gadget_driver->suspend(&musb->g);
+			spin_lock(&musb->lock);
+		}
+		musb_sync_with_bat(musb, USB_SUSPEND);	/* announce to the battery */
+		break;
+	default:
+		/* REVISIT if B_HOST, clear DEVCTL.HOSTREQ;
+		 * A_PERIPHERAL may need care too
+		 */
+		dev_warn(musb->controller, "unhandled SUSPEND transition (%s)\n",
+			usb_otg_state_string(musb->xceiv->otg->state));
+	}
 }
 
 /* Called during SRP */
