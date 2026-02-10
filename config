@@ -1,0 +1,32 @@
+# =========================
+# Kernel Builder Config
+# =========================
+
+# --- Architecture ---
+ARCH=arm64
+
+# --- Toolchain --- Root of folder of the toolchain here
+TD=~/toolchains/zyc-clang-14
+
+# --- Paths ---
+CLANG_PATH=${TD}/bin
+CC=${CLANG_PATH}/clang
+LD=${CLANG_PATH}/ld.lld
+OBJCOPY=${CLANG_PATH}/llvm-objcopy
+AS=${CLANG_PATH}/llvm-as
+NM=${CLANG_PATH}/llvm-nm
+STRIP=${CLANG_PATH}/llvm-strip
+OBJDUMP=${CLANG_PATH}/llvm-objdump
+READELF=${CLANG_PATH}/llvm-readelf
+
+# --- Cross Compilers ---
+# arm64
+CROSS_COMPILE=${CLANG_PATH}/aarch64-linux-gnu-
+# arm32
+CROSS_COMPILE_ARM32=${CLANG_PATH}/arm-linux-gnueabi-
+
+# --- Build output ---
+OUT_DIR=out
+
+# --- Config ---
+DEFCONFIG=a32_vigus_defconfig
