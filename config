@@ -29,4 +29,4 @@ CROSS_COMPILE_ARM32=${CLANG_PATH}/arm-linux-gnueabi-
 OUT_DIR=out
 
 # --- Config ---
-DEFCONFIG=a32_vigus_defconfig
+DEFCONFIG=a32_nethunter_defconfig
