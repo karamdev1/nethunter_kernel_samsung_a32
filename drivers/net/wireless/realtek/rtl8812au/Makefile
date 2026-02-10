@@ -21,8 +21,8 @@ EXTRA_LDFLAGS += --strip-debug
 
 ########################## WIFI IC ############################
 CONFIG_RTL8812A = y
-CONFIG_RTL8821A = y
 CONFIG_RTL8814A = y
+CONFIG_RTL8821C = y
 ######################### Interface ###########################
 CONFIG_USB_HCI = y
 ########################### Android ###########################
