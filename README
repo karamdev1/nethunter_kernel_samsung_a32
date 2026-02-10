@@ -1,18 +1,70 @@
-Linux kernel
-============
+## NetHunter Kernel v3 for Samsung Galaxy A32 (SM-A325F)
+This kernel is based on:
+- [Samsung Galaxy A32 Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_mt6768)
 
-This file was moved to Documentation/admin-guide/README.rst
+## Disclaimer
+This kernel is **unofficial** and provided for **educational and security research purposes only**.
+I am not responsible for any damage, data loss, or misuse.
 
-Please notice that there are several guides for kernel developers and users.
-These guides can be rendered in a number of formats, like HTML and PDF.
+This project is **not affiliated** with Offensive Security or Kali NetHunter.
 
-In order to build the documentation, use ``make htmldocs`` or
-``make pdfdocs``.
+## Features
+- Kali NetHunter Patches
+- SELinux **Permissive** (disguised as **Enforcing**)
+- USB OTG support
+- Wi-Fi monitor mode & injection (external USB adapters **only**) (Some Wi-Fi Drivers are built-in)
 
-There are various text files in the Documentation/ subdirectory,
-several of them using the Restructured Text markup notation.
-See Documentation/00-INDEX for a list of what is contained in each file.
+## Bugs
+- USB HID Injection (Basically **Impossible** without heavy **patches** on **MTK**) (I might try!)
+- Internal & External BT (The **Bluetooth Subsystem Support** has undeclared idenifiers so it couldn't be compiled)
 
-Please read the Documentation/process/changes.rst file, as it contains the
-requirements for building and running the kernel, and information about
-the problems which may result by upgrading your kernel.
+## Supported
+- Device: Samsung Galaxy A32 4G (SM-A325x)
+- Roms: One UI 5.1, 6, 7, 8, 8.5? (Only 5.1 tested, if you want to try the ports 6,7,8,8.5 I recommend LumiROM **BUT** they are not tested)
+
+## Requirements to Flash
+- Samsung Galaxy A32 4G (SM-A325x)
+- Custom recovery (TWRP recommended) - [TWRP Download](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
+
+## Notes
+- WiFi drivers are **not integrated** into the kernel (The kernel got some drivers added).
+- Users must compile and load external USB WiFi drivers as kernel modules.
+- Modules can be stored anywhere and can be managed using the NetHunter app.
+
+## WiFi Drivers Integrated
+### ATH (Not **Tested**)
+  - **ATH6KL, AR9170**
+### Atmel (Not **Tested**)
+  - **AT76c503, AT76c505, AT76c505a**
+### Mediatek (Not **Tested**)
+  - **MT7601U**
+### Ralink (Not **Tested**)
+  - **RT2x00, RT2500USB, RT2800USB**
+### Realtek (Only **RTL8821CU** Tested)
+  - **RTL8192C/CE/CU/SE/DE/EE, RTL8723COM/AE/BE, RTL8188EE**
+  - **RTL818X, RTL8821A/C, RTL8812A, RTL8814A**
+### ZyDas (Not **Tested**)
+  - **ZD1201**
+
+## Compiling the kernel or driver as an external module
+Windows Subsystem for Linux (WSL) is **supported and tested**.
+
+### 1. Install dependencies
+```
+sudo apt update && sudo apt install -y git build-essential bc flex bison libssl-dev libelf-dev \
+device-tree-compiler lz4 xz-utils zlib1g-dev libncurses-dev pahole python3 python-is-python3 \
+openjdk-17-jdk rsync cpio kmod zstd
+```
+
+### 2. Clone ZyC Clang Toolchain
+```
+git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang-14
+```
+
+### 3. Run Build Script (Able to select actions in GUI)
+```
+./build.sh
+```
+
+### 4. Compile a driver as an out of tree module (**Reminder**: )
+**Notes**: Please use the **toolchain** I provided, I recommend to save the kernel in ```/vendor/lib/modules``` and use **NetHunter** App to manage them
