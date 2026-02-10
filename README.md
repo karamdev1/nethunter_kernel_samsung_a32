@@ -27,11 +27,11 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 - Custom recovery (TWRP recommended) - [TWRP Download](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
 
 ## Notes
-- WiFi drivers are **not integrated** into the kernel (The kernel got some drivers added).
-- Users must compile and load external USB WiFi drivers as kernel modules.
+- Not all Wi-Fi drivers are **integrated** into the kernel.
+- Users must compile and load external USB Wi-Fi drivers as kernel modules if not listed in section **Integrated Wi-Fi Drivers**.
 - Modules can be stored anywhere and can be managed using the NetHunter app.
 
-## WiFi Drivers Integrated
+## Integrated Wi-Fi Drivers
 ### ATH (Not **Tested**)
   - **ATH6KL, AR9170**
 ### Atmel (Not **Tested**)
