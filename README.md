@@ -31,28 +31,50 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 
 ## Setup (Requires Root) (For root either use SukiSU or Magisk)
 ```
+------------
 Flash Kernel
-- Boot into Custom Recovery (TWRP)
--   Go to **Install** and flash the zip file you downloaded
+
+- Boot into Custom Recovery (TWRP) (Power Off then hold Volume UP & Power Button till you see the TWRP logo)
+- Go to Install and flash the zip file you downloaded
+------------
+
+------------
 Flash Root
-Magisk (Not required if your kernel had magisk and setup showed Magisk Detected)
+
+------
+Magisk (Not required if your kernel had magisk and setup showed Magisk Detected) (Recommended)
 - Flash magisk apk file
+------
+
+------
 SukiSU
 - Just install SukiSU Manager (SukiSU Integrated in kernel)
+------------
+
+------------
 Install Kali Nethunter Generic (Do the rooting method you used)
-Magisk (if your magisk version is **30.6** then Nethunter Terminal won't work) **(Recommended)**
+
+------
+Magisk (if your magisk version is 30.6 then Nethunter Terminal won't work) (Recommended)
 - Open magisk
 - Go to modules tab
-- Press **Install from Storage**
-- Select **kali-nethunter-XXXX.X-generic-arm64-full.zip** and press **Ok** (You can use minimal if you want)
+- Press Install from Storage
+- Select kali-nethunter-XXXX.X-generic-arm64-full.zip and press Ok (You can use minimal if you want)
 - Wait for flashing to finish it might take 10-30 minutes
 - After flashing is completed Reboot your phone
 - Enjoy!
-KernelSU/SukiSU **(Not Recommended)**
+------
+
+------
+KernelSU/SukiSU (Not Recommended)
 - Unfortunately you have to flash it manually or use module for KernelSU/SukiSU
-Recovery **(Not Recommended)**
+------
+
+------
+Recovery (Not Recommended)
 - Kali Nethunter supports Recovery flash but Unfortunately for me it fails due to the A325x is a dynamic device
 - You could edit the binary to make it pass but it might break your system
+------------
 ```
 
 ## Notes
