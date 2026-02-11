@@ -30,16 +30,17 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 - Custom recovery (TWRP recommended) - [TWRP Download](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
 
 ## Setup (Requires Root) (For root either use SukiSU or Magisk)
-### Flash Kernel
+```
+Flash Kernel
 - Boot into Custom Recovery (TWRP)
 -   Go to **Install** and flash the zip file you downloaded
-### Flash Root
-### Magisk (Not required if your kernel had magisk and setup showed Magisk Detected)
+Flash Root
+Magisk (Not required if your kernel had magisk and setup showed Magisk Detected)
 - Flash magisk apk file
-### SukiSU
+SukiSU
 - Just install SukiSU Manager (SukiSU Integrated in kernel)
-### Install Kali Nethunter Generic (Do the rooting method you used)
-### Magisk (if your magisk version is **30.6** then Nethunter Terminal won't work) **(Recommended)**
+Install Kali Nethunter Generic (Do the rooting method you used)
+Magisk (if your magisk version is **30.6** then Nethunter Terminal won't work) **(Recommended)**
 - Open magisk
 - Go to modules tab
 - Press **Install from Storage**
@@ -47,11 +48,12 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 - Wait for flashing to finish it might take 10-30 minutes
 - After flashing is completed Reboot your phone
 - Enjoy!
-### KernelSU/SukiSU **(Not Recommended)**
+KernelSU/SukiSU **(Not Recommended)**
 - Unfortunately you have to flash it manually or use module for KernelSU/SukiSU
-### Recovery **(Not Recommended)**
+Recovery **(Not Recommended)**
 - Kali Nethunter supports Recovery flash but Unfortunately for me it fails due to the A325x is a dynamic device
 - You could edit the binary to make it pass but it might break your system
+```
 
 ## Notes
 - Not all Wi-Fi drivers are **integrated** into the kernel.
