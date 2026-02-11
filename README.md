@@ -4,14 +4,8 @@ Custom NetHunter-ready kernel built for stability, performance tuning, and exter
 
 ---
 
-## [Click here to download](https://t.me/karamdev1group)
-
----
-
-## Base Source
-
-Derived from Samsung MT6768 kernel tree
-[Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_mt6768)
+## [Download from Telegram](https://t.me/karamdev1group)
+## [Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_mt6768)
 
 ---
 
@@ -74,7 +68,7 @@ Should work (not verified):
 * Unlocked bootloader
 * Custom recovery (recommended)
 
-TWRP build: [Recommended TWRP](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
+[TWRP Build](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
 
 ---
 
