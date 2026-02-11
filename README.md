@@ -4,7 +4,7 @@ Custom NetHunter-ready kernel built for stability, performance tuning, and exter
 
 ---
 
-## [Download](https://t.me/karamdev1group)
+## [Click here to download](https://t.me/karamdev1group)
 
 ---
 
