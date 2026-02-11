@@ -9,10 +9,13 @@ I am not responsible for any damage, data loss, or misuse.
 This project is **not affiliated** with Offensive Security or Kali NetHunter.
 
 ## Features
+- SukiSU Integrated and Working (Tested)
 - Kali NetHunter Patches
 - SELinux **Permissive** (disguised as **Enforcing**)
 - USB OTG support
 - Wi-Fi monitor mode & injection (external USB adapters **only**) (Some Wi-Fi Drivers are built-in)
+- CPU Overclocked: Little Cores from 1800MHz to 2300MHz, Big cores from 2000MHz, 2500MHz
+- CPU Default Governor: Interactive (It makes the device smoother and doesn't affect alot on battery)
 
 ## Bugs
 - USB HID Injection (Basically **Impossible** without heavy **patches** on **MTK**) (I might try!)
@@ -25,6 +28,25 @@ This project is **not affiliated** with Offensive Security or Kali NetHunter.
 ## Requirements to Flash
 - Samsung Galaxy A32 4G (SM-A325x)
 - Custom recovery (TWRP recommended) - [TWRP Download](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
+
+## Setup (Requires Root) (For root either use SukiSU or Magisk)
+### Flash Kernel
+- * Boot into Custom Recovery (TWRP)
+- ** Go to **Install** and flash the zip file you downloaded
+### Flash Root
+- * Magisk (Not required if your kernel had magisk and setup showed Magisk Detected)
+- ** Flash magisk apk file
+- * SukiSU
+- ** Just install SukiSU Manager (SukiSU Integrated in kernel)
+### Install Kali Nethunter Generic (Do the rooting method you used)
+- * Magisk (if your magisk version is **30.6** then Nethunter Terminal won't work)
+- ** Open magisk
+- ** Go to modules tab
+- ** Press **Install from Storage**
+- ** Select **kali-nethunter-XXXX.X-generic-arm64-full.zip** and press **Ok** (You can use minimal if you want but full is recommended)
+- ** Wait for flashing to finish it might take 10-30 minutes
+- ** After flashing is completed Reboot your phone
+- ** Enjoy!
 
 ## Notes
 - Not all Wi-Fi drivers are **integrated** into the kernel.
