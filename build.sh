@@ -11,6 +11,8 @@ fi
 
 source config
 
+$CLANG_PATH=$(eval echo $CLANG_PATH)
+export PATH="$CLANG_PATH:$PATH"
 export ARCH=$(eval echo $ARCH)
 export CC=$(eval echo $CC)
 export LD=$(eval echo $LD)
