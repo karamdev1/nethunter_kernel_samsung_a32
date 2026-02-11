@@ -199,19 +199,6 @@ Modules can then be managed via NetHunter app.
 
 ---
 
-## Status
-
-Current build has passed:
-
-* boot tests
-* stability tests
-* Wi-Fi injection tests
-* long runtime tests
-
-Further testing in progress before public release.
-
----
-
 ## Author Notes
 
 This kernel prioritizes:
