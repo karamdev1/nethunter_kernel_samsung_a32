@@ -76,9 +76,9 @@ Not affiliated with Offensive Security or Kali NetHunter.
 1. Install Magisk APK
 2. Reboot if prompted
 
-**SukiSU**
+**KernelSU Next**
 
-1. Install SukiSU Manager
+1. Install KernelSU Next Manager
 2. Kernel already contains SU backend
 
 ---
@@ -97,7 +97,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ---
 
-**KernelSU / SukiSU**
+**KernelSU Next**
 Manual install required. Module support varies.
 
 ---
@@ -122,13 +122,9 @@ Generic installer may fail on dynamic partitions. Editing installer scripts can 
 * Realtek:
 
   * RTL8192 series
-  * RTL8723 series
-  * RTL8188EE
   * RTL818X
-  * RTL8821A/C
-  * RTL8812A
-  * RTL8814A
-* ZyDas: ZD1201
+  * RTL8821CU
+* ZyDas: ZD1201, ZD1211/ZD1211B
 
 External modules can be compiled separately and loaded dynamically.
 
@@ -174,15 +170,6 @@ Recommended module path:
 ```
 
 Modules can then be managed via NetHunter app.
-
----
-
-## Notes
-
-* Not all USB Wi-Fi chipsets are compiled in.
-* Some adapters require manual module builds.
-* Stability testing is ongoing.
-* Releases are versioned and recoverable via Git history.
 
 ---
 
