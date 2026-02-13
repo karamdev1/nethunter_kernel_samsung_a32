@@ -46,20 +46,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ## Supported Devices
 
-* Samsung Galaxy A32 4G (SM-A325F / A325M / A325x variants)
-
----
-
-## Supported ROMs
-
-Tested:
-
-* One UI 5.1
-
-Should work (not verified):
-
-* One UI 6 / 7 / 8 ports
-* LumiROM builds
+* Samsung Galaxy A32 4G (SM-A325x variants)
 
 ---
 
