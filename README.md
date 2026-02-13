@@ -20,9 +20,9 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ## Key Features
 
-* Integrated **KernelSU Next**
+* Integrated **KernelSU Next v3.0.1-legacy** (Working & Tested)
 * Kali NetHunter patches
-* SELinux **Permissive** (reported as Enforcing)
+* SELinux **Permissive** (Bootparam enabled)
 * USB OTG support
 * External USB Wi-Fi monitor mode + injection
 * Built-in support for multiple USB Wi-Fi chipsets
@@ -97,36 +97,55 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ---
 
-**KernelSU Next**
-Manual install required. Module support varies.
+**KernelSU Next** (Not tested)
+
+1. Open KernelSU Next → Settings (Gear icon in top right)
+2. Meta Modules
+3. Install **Hybrid Mount**
+4. Reboot
+5. Open KernelSU Next → Modules (The modules count)
+6. Press '+ Install' and select NetHunter ZIP
+7. Wait for install (10-30 min)
+8. Reboot NetHunter App, NetHunter Terminal root privileges
+9. Grant
 
 ---
 
-**Recovery method**
-Generic installer may fail on dynamic partitions. Editing installer scripts can bypass this but may break system.
+**KernelSU Next Manual** (Incase KernelSU Next didnt work)
+
+1. Download F-Droid app
+2. Add nethunter repository
+3. Download and install NetHunter App, NetHunter Terminal, NetHunter Kex and NetHunter Store
+4. Grant NetHunter App, NetHunter Terminal root privileges
+5. Open NetHunter App
+6. Press the 3 lines on top right
+7. Press Kali Chroot Manager
+8. Press install and select full (Must full not minimal)
+9. Wait to Installation of chroot to finish
+10. Enjoy!
 
 ---
 
-## Integrated Wi-Fi Drivers
+## Wi-Fi Drivers (Saved in /sdcard/nh_files/modules)
 
 **Tested**
 
 * RTL8821CU
+* RTL8192EU
+* ZD1211/ZD1211B
 
 **Built-in but untested**
 
 * ATH: ATH6KL, AR9170
 * Atmel: AT76c503 / 505 / 505a
 * MediaTek: MT7601U
-* Ralink: RT2x00, RT2500USB, RT2800USB
+* Ralink: RT2x00, RT2500USB, RT2800USB,
 * Realtek:
 
-  * RTL8192 series
-  * RTL818X
+  * RTL8192EU
+  * RTL8187/RTL8187B
   * RTL8821CU
 * ZyDas: ZD1201, ZD1211/ZD1211B
-
-External modules can be compiled separately and loaded dynamically.
 
 ---
 
@@ -166,7 +185,7 @@ git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang-1
 Recommended module path:
 
 ```
-/vendor/lib/modules
+/sdcard/nh_files/modules
 ```
 
 Modules can then be managed via NetHunter app.
