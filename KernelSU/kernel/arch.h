@@ -25,6 +25,30 @@
 // https://cs.android.com/android/kernel/superproject/+/common-android-mainline:common/scripts/syscall.tbl;l=104;drc=b36d4b6aa88ef039647228b98c59a875e92f8c8e
 #define SYS_FSTAT_SYMBOL "__arm64_sys_newfstat"
 
+extern long __arm64_sys_setns(const struct pt_regs *regs);
+
+#elif defined(__arm__)
+
+// Oversimplified version of https://github.com/backslashxx/KernelSU/blob/master/kernel/arch.h#L29
+#define __PT_PARM1_REG uregs[0]
+#define __PT_PARM2_REG uregs[1]
+#define __PT_PARM3_REG uregs[2]
+#define __PT_SYSCALL_PARM4_REG uregs[3]
+#define __PT_CCALL_PARM4_REG uregs[3]
+#define __PT_PARM5_REG uregs[4]
+#define __PT_PARM6_REG uregs[5]
+#define __PT_RET_REG uregs[14]
+#define __PT_FP_REG uregs[11] /* Works only with CONFIG_FRAME_POINTER */
+#define __PT_RC_REG uregs[0]
+#define __PT_SP_REG uregs[13]
+#define __PT_IP_REG uregs[12]
+
+#define REBOOT_SYMBOL "sys_reboot"
+#define SYS_READ_SYMBOL "sys_read"
+#define SYS_EXECVE_SYMBOL "sys_execve"
+
+extern long sys_setns(const struct pt_regs *regs);
+
 #elif defined(__x86_64__)
 
 #define __PT_PARM1_REG di
@@ -40,13 +64,18 @@
 #define __PT_RC_REG ax
 #define __PT_SP_REG sp
 #define __PT_IP_REG ip
+
 #define REBOOT_SYMBOL "__x64_sys_reboot"
 #define SYS_READ_SYMBOL "__x64_sys_read"
 #define SYS_EXECVE_SYMBOL "__x64_sys_execve"
 #define SYS_FSTAT_SYMBOL "__x64_sys_newfstat"
 
+extern long __x64_sys_setns(const struct pt_regs *regs);
+
 #else
+#ifdef CONFIG_KSU_SYSCALL_HOOK
 #error "Unsupported arch"
+#endif
 #endif
 
 /* allow some architecutres to override `struct pt_regs` */
