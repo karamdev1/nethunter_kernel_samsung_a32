@@ -20,15 +20,15 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ## Key Features
 
-* Integrated **SukiSU** (working and tested)
+* Integrated **KernelSU Next**
 * Kali NetHunter patches
 * SELinux **Permissive** (reported as Enforcing)
 * USB OTG support
 * External USB Wi-Fi monitor mode + injection
 * Built-in support for multiple USB Wi-Fi chipsets
 * CPU overclock:
-
-  * LITTLE cores: 1.8 → 2.3 GHz
+  
+  * SMALL cores: stock 1.8GHz
   * BIG cores: 2.0 → 2.5 GHz
 * Default governor: **Interactive** (balanced smoothness + battery)
 * Force module unload support
