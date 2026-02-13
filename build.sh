@@ -87,6 +87,13 @@ while true; do
 				ret=$?
 				if [ $ret -eq 0 ]; then
 					echo -e "$BOLDGREEN[+] Kernel Building Succeed$ENDCOLOR"
+					make -C "$KDIR" O="$OUT_DIR" INSTALL_MOD_PATH="modules" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules_install -j"$(nproc)"
+					ret=$?
+					if [ $ret -eq 0 ]; then
+						echo -e "$BOLDGREEN[+] You can find the modules in '$OUT_DIR/modules'$ENDCOLOR"
+					else
+						echo -e "$BOLDGREEN[-] Modules saving to '$OUT_DIR/modules' Failed$ENDCOLOR"
+					fi
 				else
 					echo -e "$BOLDRED[-] Kernel Building Failed (exit code: $ret)$ENDCOLOR"
 				fi
