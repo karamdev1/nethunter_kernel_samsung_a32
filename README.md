@@ -25,7 +25,8 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * SELinux **Permissive** (Bootparam enabled)
 * USB OTG support
 * External USB Wi-Fi monitor mode + injection
-* Built-in support for multiple USB Wi-Fi chipsets
+* Driver's Modules support for multiple USB Wi-Fi chipsets
+* CANbus support
 * CPU overclock:
   
   * SMALL cores: stock 1.8GHz
