@@ -26,6 +26,8 @@ u8 center_ch_2g[CENTER_CH_2G_NUM] = {
 /* G05 */14
 };
 
+u32 write_value;
+
 #define ch_to_cch_2g_idx(ch) ((ch) - 1)
 
 u8 center_ch_2g_40m[CENTER_CH_2G_40M_NUM] = {
