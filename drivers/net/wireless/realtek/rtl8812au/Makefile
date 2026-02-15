@@ -24,10 +24,8 @@ EXTRA_CFLAGS += -I$(src)/hal/phydm -I$(srctree)/$(src)/hal/phydm
 EXTRA_LDFLAGS += --strip-all -O3
 
 ########################## WIFI IC ############################
-CONFIG_RTL8192E = y
 CONFIG_RTL8812A = y
 CONFIG_RTL8821A = y
-CONFIG_RTL8821C = y
 CONFIG_RTL8814A = y
 ######################### Interface ###########################
 CONFIG_USB_HCI = y
