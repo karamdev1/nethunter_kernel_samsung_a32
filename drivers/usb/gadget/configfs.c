@@ -1549,6 +1549,8 @@ err_comp_cleanup:
 }
 
 #ifdef CONFIG_USB_CONFIGFS_UEVENT
+static bool enable_gadget_uevent = true;
+module_param(enable_gadget_uevent, bool, 0644);
 static void android_work(struct work_struct *data)
 {
 	struct gadget_info *gi = container_of(data, struct gadget_info, work);
@@ -1578,8 +1580,9 @@ static void android_work(struct work_struct *data)
 	spin_unlock_irqrestore(&cdev->lock, flags);
 
 	if (status[0]) {
-		kobject_uevent_env(&android_device->kobj,
-					KOBJ_CHANGE, connected);
+		if (enable_gadget_uevent)
+			kobject_uevent_env(&android_device->kobj,
+						KOBJ_CHANGE, connected);
 		pr_info("%s: sent uevent %s\n", __func__, connected[0]);
 		uevent_sent = true;
 #ifdef CONFIG_USB_NOTIFY_PROC_LOG
@@ -1589,8 +1592,9 @@ static void android_work(struct work_struct *data)
 	}
 
 	if (status[1]) {
-		kobject_uevent_env(&android_device->kobj,
-					KOBJ_CHANGE, configured);
+		if (enable_gadget_uevent)
+			kobject_uevent_env(&android_device->kobj,
+						KOBJ_CHANGE, configured);
 		pr_info("%s: sent uevent %s\n", __func__, configured[0]);
 		uevent_sent = true;
 #ifdef CONFIG_USB_NOTIFY_PROC_LOG
@@ -1609,8 +1613,9 @@ static void android_work(struct work_struct *data)
 	}
 
 	if (status[2]) {
-		kobject_uevent_env(&android_device->kobj,
-					KOBJ_CHANGE, disconnected);
+		if (enable_gadget_uevent)
+			kobject_uevent_env(&android_device->kobj,
+						KOBJ_CHANGE, disconnected);
 		pr_info("%s: sent uevent %s\n", __func__, disconnected[0]);
 		uevent_sent = true;
 #ifdef CONFIG_USB_NOTIFY_PROC_LOG
