@@ -20,13 +20,14 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ## Key Features
 
-* Integrated **KernelSU Next v3.0.1-legacy** (Working & Tested)
+* Integrated **KernelSU Next v3.1.0-legacy** (Working & Tested)
 * Kali NetHunter patches
 * SELinux **Permissive** (Bootparam enabled)
 * USB OTG support
 * External USB Wi-Fi monitor mode + injection
 * Driver's Modules support for multiple USB Wi-Fi chipsets
 * CANbus support
+* Bluetooth Subsystem Support
 * Overclock:
   
   * CPU Stock Speeds
@@ -39,7 +40,6 @@ Not affiliated with Offensive Security or Kali NetHunter.
 ## Known Issues
 
 * USB HID attacks → limited on MediaTek platform (hardware + kernel constraints)
-* Bluetooth subsystem currently disabled due to unresolved compile errors
 * Internal Wi-Fi injection not supported (hardware limitation)
 
 ---
@@ -126,7 +126,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ---
 
-## Wi-Fi Drivers (Saved in /sdcard/nh_files/modules)
+## Wi-Fi Drivers (Saved in /sdcard/kernel/modules)
 
 **Tested**
 
