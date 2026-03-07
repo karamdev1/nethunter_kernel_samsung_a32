@@ -27,11 +27,10 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * External USB Wi-Fi monitor mode + injection
 * Driver's Modules support for multiple USB Wi-Fi chipsets
 * CANbus support
-* CPU overclock:
+* Overclock:
   
-  * SMALL cores: stock 1.8GHz
-  * BIG cores: 2.0 → 2.5 GHz
-* Default governor: **Interactive** (balanced smoothness + battery)
+  * CPU Stock Speeds
+  * GPU Overclocked to 1.22GHz
 * Force module unload support
 * External module loading supported via NetHunter app
 
@@ -137,16 +136,17 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 **Built-in but untested**
 
-* ATH: ATH6KL, AR9170
+* ATH: ATH6KL, AR9170 **Module**
 * Atmel: AT76c503 / 505 / 505a
-* MediaTek: MT7601U
+* MediaTek: MT7601U **Module**
 * Ralink: RT2x00, RT2500USB, RT2800USB,
 * Realtek:
 
-  * RTL8192EU
+  * RTL88XXAU **Module**
+  * RTL8192EU **Module**
   * RTL8187/RTL8187B
-  * RTL8821CU
-* ZyDas: ZD1201, ZD1211/ZD1211B
+  * RTL8821CU **Module**
+* ZyDas: ZD1201, ZD1211/ZD1211B **Module**
 
 ---
 
