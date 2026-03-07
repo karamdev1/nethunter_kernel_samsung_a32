@@ -61,68 +61,9 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ## Installation
 
-### Flash Kernel
-
 1. Boot to recovery
 2. Install kernel zip
 3. Reboot
-
----
-
-### Root Setup
-
-**Magisk (recommended)**
-
-1. Install Magisk APK
-2. Reboot if prompted
-
-**KernelSU Next**
-
-1. Install KernelSU Next Manager
-2. Kernel already contains SU backend
-
----
-
-### Install Kali NetHunter (Generic)
-
-**Magisk method**
-
-1. Open Magisk → Modules
-2. Install from storage
-3. Select NetHunter ZIP
-4. Wait for install (10–30 min)
-5. Reboot
-
-> Note: Some Magisk builds may break NetHunter Terminal.
-
----
-
-**KernelSU Next** (Not tested)
-
-1. Open KernelSU Next → Settings (Gear icon in top right)
-2. Meta Modules
-3. Install **Hybrid Mount**
-4. Reboot
-5. Open KernelSU Next → Modules (The modules count)
-6. Press '+ Install' and select NetHunter ZIP
-7. Wait for install (10-30 min)
-8. Reboot NetHunter App, NetHunter Terminal root privileges
-9. Grant
-
----
-
-**KernelSU Next Manual** (Incase KernelSU Next didnt work)
-
-1. Download F-Droid app
-2. Add nethunter repository
-3. Download and install NetHunter App, NetHunter Terminal, NetHunter Kex and NetHunter Store
-4. Grant NetHunter App, NetHunter Terminal root privileges
-5. Open NetHunter App
-6. Press the 3 lines on top right
-7. Press Kali Chroot Manager
-8. Press install and select full (Must full not minimal)
-9. Wait to Installation of chroot to finish
-10. Enjoy!
 
 ---
 
@@ -137,22 +78,17 @@ Not affiliated with Offensive Security or Kali NetHunter.
 **Built-in but untested**
 
 * ATH: ATH6KL, AR9170 **Module**
-* Atmel: AT76c503 / 505 / 505a
 * MediaTek: MT7601U **Module**
-* Ralink: RT2x00, RT2500USB, RT2800USB,
+* Ralink: RT2x00, RT2500USB, RT2800USB **Module**
 * Realtek:
 
   * RTL88XXAU **Module**
   * RTL8192EU **Module**
-  * RTL8187/RTL8187B
+  * RTL8187/RTL8187B **Module**
   * RTL8821CU **Module**
 * ZyDas: ZD1201, ZD1211/ZD1211B **Module**
 
 ---
-
-## Build Environment
-
-WSL confirmed working.
 
 ### Dependencies
 
