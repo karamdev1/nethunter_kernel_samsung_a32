@@ -186,10 +186,10 @@ git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang-1
 Recommended module path:
 
 ```
-/sdcard/nh_files/modules
+/sdcard/kernel/modules
 ```
 
-Modules can then be managed via NetHunter app.
+Modules can be managed via NetHunter app.
 
 ---
 
