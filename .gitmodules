@@ -1,3 +1,6 @@
 [submodule "drivers/net/can/elmcan"]
 	path = drivers/net/can/elmcan
 	url = https://github.com/V0lk3n/elmcan
+[submodule "KernelSU-Next"]
+	path = KernelSU-Next
+	url = https://github.com/KernelSU-Next/KernelSU-Next/tree/legacy
