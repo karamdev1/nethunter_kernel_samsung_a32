@@ -1,6 +1,10 @@
 [submodule "drivers/net/can/elmcan"]
 	path = drivers/net/can/elmcan
 	url = https://github.com/V0lk3n/elmcan
+[submodule "drivers/net/can/usb-can-2-module"]
+	path = drivers/net/can/usb-can-2-module
+	url = https://github.com/V0lk3n/usb-can-2-module
 [submodule "KernelSU-Next"]
 	path = KernelSU-Next
-	url = https://github.com/KernelSU-Next/KernelSU-Next/tree/legacy
+	url = https://github.com/KernelSU-Next/KernelSU-Next
+	branch = legacy
