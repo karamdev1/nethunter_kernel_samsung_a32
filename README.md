@@ -4,7 +4,7 @@ Custom NetHunter-ready kernel built for stability, performance tuning, and exter
 
 ---
 
-## [Download from Google Drive](https://drive.google.com/file/d/1t0DFmld-4AA0CZm1eE_-2j2o2MHfKKQN/view?usp=drive_link)
+## [Download from Google Drive](https://drive.google.com/drive/folders/1-WTgc8WdROdaQjSQCMAMkMX8YOPUw8yN?usp=drive_link)
 ## [Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_mt6768)
 
 ---
@@ -114,27 +114,3 @@ git clone https://github.com/EmanuelCN/zyc_clang-14.git ~/toolchains/zyc-clang-1
 ```
 ./build.sh
 ```
-
----
-
-### Compile External Modules
-
-Recommended module path:
-
-```
-/sdcard/kernel/modules
-```
-
-Modules can be managed via NetHunter app.
-
----
-
-## Author Notes
-
-This kernel prioritizes:
-
-* stability first
-* performance second
-* features third
-
-Design goal: daily-driver capable NetHunter kernel.
