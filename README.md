@@ -1,3 +1,4 @@
+# Outdated! To get the stable version go to branch Nethunter-v3.2
 # NetHunter Kernel v3 — Samsung Galaxy A32 4G (SM-A325x)
 
 Custom NetHunter-ready kernel built for stability, performance tuning, and external adapter penetration testing.
