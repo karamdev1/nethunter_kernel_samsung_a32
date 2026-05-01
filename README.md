@@ -1,5 +1,4 @@
-# Outdated! To get the stable version go to branch Nethunter-v3.2
-# NetHunter Kernel v3 — Samsung Galaxy A32 4G (SM-A325x)
+# NetHunter Kernel v4 — Samsung Galaxy A32 4G (SM-A325x)
 
 Custom NetHunter-ready kernel built for stability, performance tuning, and external adapter penetration testing.
 
@@ -21,9 +20,9 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ## Key Features
 
-* Integrated **KernelSU Next v3.1.0-legacy** (Working & Tested)
+* Integrated **KernelSU Next v3.2.0-legacy** (Working & Tested)
 * Kali NetHunter patches
-* SELinux **Permissive** (Bootparam enabled)
+* SELinux **Permissive**
 * USB OTG support
 * External USB Wi-Fi monitor mode + injection
 * Driver's Modules support for multiple USB Wi-Fi chipsets
@@ -32,7 +31,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * Overclock:
   
   * CPU Stock Speeds
-  * GPU Overclocked to 1.22GHz
+  * GPU Overclocked to 1.17GHz
 * Force module unload support
 * External module loading supported via NetHunter app
 
@@ -40,7 +39,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ## Known Issues
 
-* USB HID attacks → limited on MediaTek platform (hardware + kernel constraints)
+* USB HID attacks
 * Internal Wi-Fi injection not supported (hardware limitation)
 
 ---
@@ -68,7 +67,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ---
 
-## Wi-Fi Drivers (Saved in /sdcard/kernel/modules)
+## Wi-Fi Drivers
 
 **Tested**
 
@@ -78,16 +77,15 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 **Built-in but untested**
 
-* ATH: ATH6KL, AR9170 **Module**
-* MediaTek: MT7601U **Module**
-* Ralink: RT2x00, RT2500USB, RT2800USB **Module**
+* ATH: ATH6KL, AR9170
+* MediaTek: MT7601U
+* Ralink: RT2x00, RT2500USB, RT2800USB
 * Realtek:
 
   * RTL88XXAU **Module**
   * RTL8192EU **Module**
-  * RTL8187/RTL8187B **Module**
   * RTL8821CU **Module**
-* ZyDas: ZD1201, ZD1211/ZD1211B **Module**
+* ZyDas: ZD1201, ZD1211/ZD1211B
 
 ---
 
