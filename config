@@ -18,4 +18,4 @@ CROSS_COMPILE_ARM32=${BIN_PATH}/arm-linux-gnueabi- # useless for gcc
 OUT_DIR=out
 
 # --- Config ---
-DEFCONFIG=a32_nethunter_old_defconfig
+DEFCONFIG=a32_nethunter_defconfig
