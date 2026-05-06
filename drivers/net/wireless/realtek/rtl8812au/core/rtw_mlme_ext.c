@@ -1344,7 +1344,7 @@ void mgt_dispatcher(_adapter *padapter, union recv_frame *precv_frame)
 		else
 			ptable->func = &OnAuthClient;
 #if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 0)
-	__attribute__ ((fallthrough));
+	fallthrough;
 #else
 			__attribute__ ((__fallthrough__));
 #endif
