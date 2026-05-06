@@ -63,3 +63,7 @@ export LOCALVERSION=-NetHunter
 
 # Some devices will have mismatch, to ignore errors uncomment the following line
 #MAKE_ARGS="CONFIG_NO_ERROR_ON_MISMATCH=y"
+
+# Preferred target for make [menu|n]config - "menuconfig" is default but "nconfig" can be used if keymappings are off
+# Some Kali versions fail with menuconfig thanks to libncurses-dev/devel binaries mismatch, then uncomment below to use nconfig.
+#CONFIG_TOOL=nconfig

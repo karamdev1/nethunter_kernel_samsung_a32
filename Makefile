@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: GPL-2.0
 VERSION = 4
 PATCHLEVEL = 14
-SUBLEVEL = 356
-EXTRAVERSION = -Karam
+SUBLEVEL = 357
+EXTRAVERSION = -openela
 NAME = Petit Gorille
 
 # *DOCUMENTATION*
@@ -390,6 +390,8 @@ OBJDUMP		?= $(CROSS_COMPILE)objdump
 READELF		= $(CROSS_COMPILE)readelf
 endif
 PAHOLE		= pahole
+PAHOLE_FLAGS	= $(shell PAHOLE=$(PAHOLE) $(CONFIG_SHELL) $(srctree)/scripts/pahole-flags.sh)
+RESOLVE_BTFIDS	= $(objtree)/tools/bpf/resolve_btfids/resolve_btfids
 AWK		= awk
 GENKSYMS	= scripts/genksyms/genksyms
 INSTALLKERNEL  := installkernel
@@ -445,7 +447,7 @@ GCC_PLUGINS_CFLAGS :=
 CLANG_FLAGS :=
 
 export ARCH SRCARCH CONFIG_SHELL HOSTCC HOSTCFLAGS CROSS_COMPILE LD CC
-export CPP AR NM STRIP OBJCOPY OBJDUMP PAHOLE READELF HOSTLDFLAGS HOST_LOADLIBES
+export CPP AR NM STRIP OBJCOPY OBJDUMP PAHOLE RESOLVE_BTFIDS READELF HOSTLDFLAGS HOST_LOADLIBES
 export MAKE AWK GENKSYMS INSTALLKERNEL PERL PYTHON UTS_MACHINE
 export HOSTCXX HOSTCXXFLAGS LDFLAGS_MODULE CHECK CHECKFLAGS
 
@@ -456,6 +458,7 @@ export KBUILD_AFLAGS AFLAGS_KERNEL AFLAGS_MODULE
 export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_LDFLAGS_MODULE
 export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL
 export KBUILD_ARFLAGS
+export PAHOLE_FLAGS
 
 # When compiling out-of-tree modules, put MODVERDIR in the module
 # tree rather than in the kernel tree. The kernel tree might
@@ -526,6 +529,11 @@ RETPOLINE_CFLAGS := $(call cc-option,$(RETPOLINE_CFLAGS_GCC),$(call cc-option,$(
 RETPOLINE_VDSO_CFLAGS := $(call cc-option,$(RETPOLINE_VDSO_CFLAGS_GCC),$(call cc-option,$(RETPOLINE_VDSO_CFLAGS_CLANG)))
 export RETPOLINE_CFLAGS
 export RETPOLINE_VDSO_CFLAGS
+
+ifeq ($(call shell-cached,$(CONFIG_SHELL) $(srctree)/scripts/cc-can-link.sh $(CC)), y)
+  CC_CAN_LINK := y
+  export CC_CAN_LINK
+endif
 
 ifeq ($(config-targets),1)
 # ===========================================================================
@@ -1099,6 +1107,12 @@ ifdef CONFIG_STACK_VALIDATION
   endif
 endif
 
+ifdef CONFIG_DEBUG_INFO_BTF
+
+resolve_btfids_target := $(RESOLVE_BTFIDS)
+
+endif
+
 PHONY += prepare0
 
 ifeq ($(KBUILD_EXTMOD),)
@@ -1224,7 +1238,7 @@ prepare0: archprepare gcc-plugins
 	$(Q)$(MAKE) $(build)=.
 
 # All the preparing..
-prepare: prepare0 prepare-objtool
+prepare: prepare0 prepare-objtool prepare-resolve_btfids
 
 # Support for using generic headers in asm-generic
 PHONY += asm-generic uapi-asm-generic
@@ -1246,10 +1260,22 @@ else
 endif
 endif
 
+prepare-resolve_btfids: $(resolve_btfids_target)
+ifeq ($(ERROR_RESOLVE_BTFIDS),1)
+	@echo "error: Cannot generate BTF IDs for CONFIG_DEBUG_INFO_BTF=y, please install libelf-dev, libelf-devel or elfutils-libelf-devel" >&2
+	@false
+endif
+
+$(RESOLVE_BTFIDS): FORCE
+	$(Q)mkdir -p $(abspath $(dir $@))
+	$(Q)$(MAKE) -C $(srctree)/tools/bpf/resolve_btfids \
+		srctree=$(abspath $(srctree)) \
+		OUTPUT=$(abspath $(dir $@))/
+
 # Disable clang-specific config options when using a different compiler
 clang-specific-configs := LTO_CLANG CFI_CLANG SHADOW_CALL_STACK INIT_STACK_ALL
 
-PHONY += check-clang-specific-options
+PHONY += check-clang-specific-options prepare-resolve_btfids
 check-clang-specific-options: $(KCONFIG_CONFIG) FORCE
 ifneq ($(cc-name),clang)
 ifneq ($(findstring y,$(shell $(CONFIG_SHELL) \

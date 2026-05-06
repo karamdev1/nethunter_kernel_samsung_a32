@@ -160,46 +160,27 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
 	new_value = !!new_value;
 
 	old_value = enforcing_enabled(state);
-
-// [ SEC_SELINUX_PORTING_COMMON
-#if defined(CONFIG_ALWAYS_ENFORCE) || defined(CONFIG_ALWAYS_PERMISSIVE)
 #ifdef CONFIG_ALWAYS_ENFORCE
 	// If build is user build and enforce option is set, selinux is always enforcing
 	new_value = 1;
 #elif CONFIG_ALWAYS_PERMISSIVE
-        // Set permissive in this case
-        new_value = 0;
+		// Set permissive in this case
+		new_value = 0;
 #endif
-        length = avc_has_perm(&selinux_state,
-				      current_sid(), SECINITSID_SECURITY,
-				      SECCLASS_SECURITY, SECURITY__SETENFORCE,
-				      NULL);
-	audit_log(current->audit_context, GFP_KERNEL, AUDIT_MAC_STATUS,
-			"enforcing=%d old_enforcing=%d auid=%u ses=%u"
-			" enabled=%d old-enabled=%d lsm=selinux res=1",
-			new_value, selinux_enforcing,
-			from_kuid(&init_user_ns, audit_get_loginuid(current)),
-			audit_get_sessionid(current),
-			selinux_enabled, selinux_enabled);
-        enforcing_set(state, new_value);
-	avc_ss_reset(state->avc, 0);
-	selnl_notify_setenforce(new_value);
-	selinux_status_update_setenforce(state, new_value);
-#else
-	if (new_value != selinux_enforcing) { // SEC_SELINUX_PORTING_COMMON Change to use RKP
+
+	if (new_value != old_value) {
 		length = avc_has_perm(&selinux_state,
 				      current_sid(), SECINITSID_SECURITY,
 				      SECCLASS_SECURITY, SECURITY__SETENFORCE,
 				      NULL);
 		if (length)
 			goto out;
-		audit_log(current->audit_context, GFP_KERNEL, AUDIT_MAC_STATUS,
+		audit_log(audit_context(), GFP_KERNEL, AUDIT_MAC_STATUS,
 			"enforcing=%d old_enforcing=%d auid=%u ses=%u"
-			" enabled=%d old-enabled=%d lsm=selinux res=1",
-				new_value, selinux_enforcing, // SEC_SELINUX_PORTING_COMMON Change to use RKP 
+			" enabled=1 old-enabled=1 lsm=selinux res=1",
+			new_value, old_value,
 			from_kuid(&init_user_ns, audit_get_loginuid(current)),
-			audit_get_sessionid(current),
-			selinux_enabled, selinux_enabled);					 
+			audit_get_sessionid(current));
 		enforcing_set(state, new_value);
 		if (new_value)
 			avc_ss_reset(state->avc, 0);
@@ -208,8 +189,6 @@ static ssize_t sel_write_enforce(struct file *file, const char __user *buf,
 		if (!new_value)
 			call_lsm_notifier(LSM_POLICY_CHANGE, NULL);
 	}
-#endif
-// ] SEC_SELINUX_PORTING_COMMON					   
 	length = count;
 out:
 	kfree(page);
@@ -309,6 +288,14 @@ static ssize_t sel_write_disable(struct file *file, const char __user *buf,
 	char *page;
 	ssize_t length;
 	int new_value;
+	int enforcing;
+
+	/* NOTE: we are now officially considering runtime disable as
+	 *       deprecated, and using it will become increasingly painful
+	 *       (e.g. sleeping/blocking) as we progress through future
+	 *       kernel releases until eventually it is removed
+	 */
+	pr_err("SELinux:  Runtime disable is deprecated, use selinux=0 on the kernel cmdline.\n");
 
 	if (count >= PAGE_SIZE)
 		return -ENOMEM;
@@ -326,11 +313,14 @@ static ssize_t sel_write_disable(struct file *file, const char __user *buf,
 		goto out;
 
 	if (new_value) {
+		enforcing = enforcing_enabled(fsi->state);
 		length = selinux_disable(fsi->state);
 		if (length)
 			goto out;
-		audit_log(current->audit_context, GFP_KERNEL, AUDIT_MAC_STATUS,
-			"selinux=0 auid=%u ses=%u",
+		audit_log(audit_context(), GFP_KERNEL, AUDIT_MAC_STATUS,
+			"enforcing=%d old_enforcing=%d auid=%u ses=%u"
+			" enabled=0 old-enabled=1 lsm=selinux res=1",
+			enforcing, enforcing,
 			from_kuid(&init_user_ns, audit_get_loginuid(current)),
 			audit_get_sessionid(current));
 	}
@@ -605,7 +595,7 @@ static ssize_t sel_write_load(struct file *file, const char __user *buf,
 	length = count;
 
 out1:
-	audit_log(current->audit_context, GFP_KERNEL, AUDIT_MAC_POLICY_LOAD,
+	audit_log(audit_context(), GFP_KERNEL, AUDIT_MAC_POLICY_LOAD,
 		"policy loaded auid=%u ses=%u",
 		from_kuid(&init_user_ns, audit_get_loginuid(current)),
 		audit_get_sessionid(current));
@@ -1762,7 +1752,7 @@ static ssize_t sel_read_class(struct file *file, char __user *buf,
 {
 	unsigned long ino = file_inode(file)->i_ino;
 	char res[TMPBUFLEN];
-	ssize_t len = snprintf(res, sizeof(res), "%d", sel_ino_to_class(ino));
+	ssize_t len = scnprintf(res, sizeof(res), "%d", sel_ino_to_class(ino));
 	return simple_read_from_buffer(buf, count, ppos, res, len);
 }
 
@@ -1776,7 +1766,7 @@ static ssize_t sel_read_perm(struct file *file, char __user *buf,
 {
 	unsigned long ino = file_inode(file)->i_ino;
 	char res[TMPBUFLEN];
-	ssize_t len = snprintf(res, sizeof(res), "%d", sel_ino_to_perm(ino));
+	ssize_t len = scnprintf(res, sizeof(res), "%d", sel_ino_to_perm(ino));
 	return simple_read_from_buffer(buf, count, ppos, res, len);
 }
 
@@ -2125,7 +2115,8 @@ static int __init init_sel_fs(void)
 	selinux_enabled = 1;
 #endif
 // ] SEC_SELINUX_PORTING_COMMON			   
-	if (!selinux_enabled)
+
+	if (!selinux_enabled_boot)
 		return 0;
 
 	err = sysfs_create_mount_point(fs_kobj, "selinux");
@@ -2161,6 +2152,7 @@ __initcall(init_sel_fs);
 void exit_sel_fs(void)
 {
 	sysfs_remove_mount_point(fs_kobj, "selinux");
+	dput(selinux_null.dentry);
 	kern_unmount(selinuxfs_mount);
 	unregister_filesystem(&sel_fs_type);
 }

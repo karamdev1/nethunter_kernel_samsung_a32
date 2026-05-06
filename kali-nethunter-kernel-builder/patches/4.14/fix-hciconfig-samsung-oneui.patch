@@ -431,33 +431,33 @@ index fc32f5bc0..93093d7c3 100644
  	void __user *argp = (void __user *)arg;
  	struct sock *sk = sock->sk;
  	int err;
-#@@ -1033,19 +1030,19 @@ static int hci_sock_ioctl(struct socket *sock, unsigned int cmd,
-# 		goto done;
-# 	}
-# 
-#-	// When calling an ioctl on an unbound raw socket, then ensure
-#-	// that the monitor gets informed. Ensure that the resulting event
-#-	// is only send once by checking if the cookie exists or not. The
-#-	// socket cookie will be only ever generated once for the lifetime
-#-	// of a given socket.
-#-
-#+	/* When calling an ioctl on an unbound raw socket, then ensure
-#+	 * that the monitor gets informed. Ensure that the resulting event
-#+	 * is only send once by checking if the cookie exists or not. The
-#+	 * socket cookie will be only ever generated once for the lifetime
-#+	 * of a given socket.
-#+	 */
-# 	if (hci_sock_gen_cookie(sk)) {
-# 		struct sk_buff *skb;
-# 
-# 		if (capable(CAP_NET_ADMIN))
-# 			hci_sock_set_flag(sk, HCI_SOCK_TRUSTED);
-# 
-#-		// Send event to monitor
-#+		/* Send event to monitor */
-# 		skb = create_monitor_ctrl_open(sk);
-# 		if (skb) {
-# 			hci_send_to_channel(HCI_CHANNEL_MONITOR, skb,
+@@ -977,19 +974,19 @@ static int hci_sock_ioctl(struct socket *sock, unsigned int cmd,
+ 		goto done;
+ 	}
+ 
+-	// When calling an ioctl on an unbound raw socket, then ensure
+-	// that the monitor gets informed. Ensure that the resulting event
+-	// is only send once by checking if the cookie exists or not. The
+-	// socket cookie will be only ever generated once for the lifetime
+-	// of a given socket.
+-
++	/* When calling an ioctl on an unbound raw socket, then ensure
++	 * that the monitor gets informed. Ensure that the resulting event
++	 * is only send once by checking if the cookie exists or not. The
++	 * socket cookie will be only ever generated once for the lifetime
++	 * of a given socket.
++	 */
+ 	if (hci_sock_gen_cookie(sk)) {
+ 		struct sk_buff *skb;
+ 
+ 		if (capable(CAP_NET_ADMIN))
+ 			hci_sock_set_flag(sk, HCI_SOCK_TRUSTED);
+ 
+-		// Send event to monitor
++		/* Send event to monitor */
+ 		skb = create_monitor_ctrl_open(sk);
+ 		if (skb) {
+ 			hci_send_to_channel(HCI_CHANNEL_MONITOR, skb,
 @@ -1053,14 +1050,11 @@ static int hci_sock_ioctl(struct socket *sock, unsigned int cmd,
  done:
  	release_sock(sk);

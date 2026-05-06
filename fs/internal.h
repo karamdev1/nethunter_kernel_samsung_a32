@@ -76,7 +76,6 @@ extern int finish_automount(struct vfsmount *, struct path *);
 extern int sb_prepare_remount_readonly(struct super_block *);
 
 extern void __init mnt_init(void);
-int path_umount(struct path *path, int flags);
 
 extern int __mnt_want_write(struct vfsmount *);
 extern int __mnt_want_write_file(struct file *);
@@ -122,7 +121,7 @@ extern struct file *do_file_open_root(struct dentry *, struct vfsmount *,
 		const char *, const struct open_flags *);
 
 extern int open_check_o_direct(struct file *f);
-extern int vfs_open(const struct path *, struct file *, const struct cred *);
+extern int vfs_open(const struct path *, struct file *);
 extern struct file *filp_clone_open(struct file *);
 
 /*
