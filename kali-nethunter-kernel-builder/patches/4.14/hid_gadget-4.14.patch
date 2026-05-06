@@ -375,11 +375,11 @@
 +void ghid_cleanup(void);
 +
 +#endif
---- a/drivers/usb/gadget/function/Makefile	2019-08-30 21:33:54.869000000 +1000
-+++ b/drivers/usb/gadget/function/Makefile	2019-08-30 21:34:51.429000000 +1000
-@@ -69,3 +69,5 @@
- obj-$(CONFIG_USB_F_GSI)		+= usb_f_gsi.o
- usb_f_qdss-y			:= f_qdss.o u_qdss.o
- obj-$(CONFIG_USB_F_QDSS)	+= usb_f_qdss.o
-+usb_f_hid-y                     := f_hid.o
-+obj-$(CONFIG_USB_G_ANDROID)     += usb_f_hid.o
+#--- a/drivers/usb/gadget/function/Makefile	2019-08-30 21:33:54.869000000 +1000
+#+++ b/drivers/usb/gadget/function/Makefile	2019-08-30 21:34:51.429000000 +1000
+#@@ -69,3 +69,5 @@
+# obj-$(CONFIG_USB_F_GSI)		+= usb_f_gsi.o
+# usb_f_qdss-y			:= f_qdss.o u_qdss.o
+# obj-$(CONFIG_USB_F_QDSS)	+= usb_f_qdss.o
+#+usb_f_hid-y                     := f_hid.o
+#+obj-$(CONFIG_USB_G_ANDROID)     += usb_f_hid.o
