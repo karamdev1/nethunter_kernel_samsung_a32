@@ -1,4 +1,4 @@
-# NetHunter Kernel v4 — Samsung Galaxy A32 4G (SM-A325x)
+# NetHunter Kernel v4.1 — Samsung Galaxy A32 4G (SM-A325x)
 
 Custom NetHunter-ready kernel built for stability, performance tuning, and external adapter penetration testing.
 
@@ -23,7 +23,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * Integrated **KernelSU Next v3.2.0-legacy** (Working & Tested)
 * Kali NetHunter patches
 * SELinux **Permissive**
-* USB OTG support
+* USB HID support
 * External USB Wi-Fi monitor mode + injection
 * Driver's Modules support for multiple USB Wi-Fi chipsets
 * CANbus support
@@ -31,15 +31,14 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * Overclock:
   
   * CPU Stock Speeds
-  * GPU Overclocked to 1.17GHz
+  * GPU Overclocked to 1.15GHz
 * Force module unload support
 * External module loading supported via NetHunter app
 
 ---
 
-## Known Issues
+## Bugs
 
-* USB HID attacks
 * Internal Wi-Fi injection not supported (hardware limitation)
 
 ---
