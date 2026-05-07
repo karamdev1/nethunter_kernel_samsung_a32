@@ -87,19 +87,19 @@ static struct usb_interface_descriptor hidg_interface_desc = {
 	.bAlternateSetting	= 0,
 	.bNumEndpoints		= 2,
 	.bInterfaceClass	= USB_CLASS_HID,
-	/* .bInterfaceSubClass	= DYNAMIC */
-	/* .bInterfaceProtocol	= DYNAMIC */
+	.bInterfaceSubClass	= 0x01, /* Boot Interface Subclass */
+	.bInterfaceProtocol	= 0x01, /* Keyboard Protocol */
 	/* .iInterface		= DYNAMIC */
 };
 
 static struct hid_descriptor hidg_desc = {
 	.bLength			= sizeof hidg_desc,
 	.bDescriptorType		= HID_DT_HID,
-	.bcdHID				= cpu_to_le16(0x0101),
+	.bcdHID				= cpu_to_le16(0x0111),
 	.bCountryCode			= 0x00,
 	.bNumDescriptors		= 0x1,
-	/*.desc[0].bDescriptorType	= DYNAMIC */
-	/*.desc[0].wDescriptorLenght	= DYNAMIC */
+	.desc[0].bDescriptorType	= HID_DT_REPORT,
+	.desc[0].wDescriptorLength	= 0,
 };
 
 /* Super-Speed Support */
