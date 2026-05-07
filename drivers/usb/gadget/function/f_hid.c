@@ -25,8 +25,6 @@
 #include "f_hid.h"
 #include "u_f.h"
 #include "u_hid.h"
-#include "f_hid_android_keyboard.c"
-#include "f_hid_android_mouse.c"
 
 #define HIDG_MINORS	4
 
