@@ -423,7 +423,9 @@ try_again:
     if (status < 0) {
         goto release_write_pending;
     } else {
+		udelay(50);
         usb_ep_fifo_flush(hidg->in_ep);
+		usb_ep_clear_halt(hidg->in_ep);
         status = count;
     }
 
