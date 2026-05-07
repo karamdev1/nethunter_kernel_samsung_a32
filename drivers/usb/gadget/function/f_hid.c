@@ -420,12 +420,14 @@ try_again:
 	}
 
 	status = usb_ep_queue(hidg->in_ep, req, GFP_ATOMIC);
-	if (status < 0)
-		goto release_write_pending;
-	else
-		status = count;
+    if (status < 0) {
+        goto release_write_pending;
+    } else {
+        usb_ep_fifo_flush(hidg->in_ep);
+        status = count;
+    }
 
-	return status;
+    return status;
 release_write_pending:
 	spin_lock_irqsave(&hidg->write_spinlock, flags);
 	hidg->write_pending = 0;
@@ -563,7 +565,9 @@ static int hidg_setup(struct usb_function *f,
 	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
 		  | HID_REQ_SET_REPORT):
 		VDBG(cdev, "set_report | wLength=%d\n", ctrl->wLength);
-		goto stall;
+		length = min_t(unsigned, length, hidg->report_length);
+        memset(req->buf, 0x0, length);
+		goto respond;
 		break;
 
 	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
@@ -1174,21 +1178,6 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
 		}
 	}
 
-	/* HACK, replace content, duplicate code from above */
-	hidg->bInterfaceSubClass = hid_data.subclass;
-	hidg->bInterfaceProtocol = hid_data.protocol;
-	hidg->report_length = hid_data.report_length;
-	hidg->report_desc_length = hid_data.report_desc_length;
-	hidg->report_desc = kmemdup(hid_data.report_desc,
-			hid_data.report_desc_length,
-			GFP_KERNEL);
-	if (!hidg->report_desc) {
-		kfree(hidg);
-		mutex_unlock(&opts->lock);
-		return ERR_PTR(-ENOMEM);
-	}
-
-
 	mutex_unlock(&opts->lock);
 
 	hidg->func.name    = "hid";
@@ -1252,6 +1241,7 @@ int hidg_bind_config(struct usb_configuration *c,
 	hidg->func.set_alt = hidg_set_alt;
 	hidg->func.disable = hidg_disable;
 	hidg->func.setup   = hidg_setup;
+	hidg->func.free_func = hidg_free;
 
 	/* this could me made configurable at some point */
 	hidg->qlen	   = 4;

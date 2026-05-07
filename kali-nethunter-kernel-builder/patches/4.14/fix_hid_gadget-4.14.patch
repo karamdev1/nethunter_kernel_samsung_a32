@@ -96,6 +96,7 @@
 +	hidg->func.set_alt = hidg_set_alt;
 +	hidg->func.disable = hidg_disable;
 +	hidg->func.setup   = hidg_setup;
++	hidg->func.free_func = hidg_free;
 +
 +	/* this could me made configurable at some point */
 +	hidg->qlen	   = 4;
