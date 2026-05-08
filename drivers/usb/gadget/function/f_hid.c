@@ -423,6 +423,9 @@ try_again:
     if (status < 0) {
         goto release_write_pending;
     } else {
+		#if HZ == 1000
+			usleep_range(3000, 6000);
+		#endif
         status = count;
     }
 
