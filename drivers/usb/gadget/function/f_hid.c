@@ -423,9 +423,15 @@ try_again:
     if (status < 0) {
         goto release_write_pending;
     } else {
-		#if HZ == 1000
-			usleep_range(3000, 6000);
-		#endif
+		// To match 100HZ (10ms window) timing
+		#if HZ == 250
+            mdelay(6); // 4ms tick + 6ms = 10ms
+        #elif HZ == 300
+            mdelay(7); // ~3.3ms tick + 7ms = 10.3ms
+        #elif HZ == 1000
+            mdelay(9); // 1ms tick + 9ms = 10ms
+        #endif
+		
         status = count;
     }
 
