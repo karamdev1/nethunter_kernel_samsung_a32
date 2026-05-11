@@ -38,7 +38,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ---
 
-## Wi-Fi Drivers
+## Wi-Fi Drivers (USB Only)
 
 **Tested**
 
@@ -53,12 +53,12 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * Ralink: RT2x00, RT2500USB, RT2800USB
 * Realtek:
   
-  * RTL88XXAU **Module**
-  * RTL8192EU **Module**
-  * RTL8188EU/CU
-  * RTL8192CU
-  * RTL8821CU **Module**
-  * RTL8187/RTL8187B
+  * RTL8723D
+  * RTL8812A
+  * RTL8814A
+  * RTL8821A/C
+  * RTL8822B/C
+  * RTL8192E
 * ZyDas: ZD1201, ZD1211/ZD1211B
 
 ---
