@@ -10037,7 +10037,7 @@ struct wiphy *rtw_wiphy_alloc(_adapter *padapter, struct device *dev)
 
 	rtw_cfg80211_preinit_wiphy(padapter, wiphy);
 	/* init regulary domain */
-	rtw_regd_init(wiphy);
+	rtl_regd_init_v2(wiphy);
 
 	RTW_INFO(FUNC_WIPHY_FMT"\n", FUNC_WIPHY_ARG(wiphy));
 

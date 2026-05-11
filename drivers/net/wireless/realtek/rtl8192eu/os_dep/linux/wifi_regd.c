@@ -389,7 +389,7 @@ static void _rtw_regd_init_wiphy(struct rtw_regulatory *reg, struct wiphy *wiphy
 	rtw_regd_apply_flags(wiphy);
 }
 
-void rtw_regd_init(struct wiphy *wiphy)
+void rtl_regd_init_v2(struct wiphy *wiphy)
 {
 
 	_rtw_regd_init_wiphy(NULL, wiphy);
