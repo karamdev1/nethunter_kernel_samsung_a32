@@ -21,25 +21,45 @@ Not affiliated with Offensive Security or Kali NetHunter.
 ## Key Features
 
 * Integrated **KernelSU Next v3.2.0-legacy** (Working & Tested)
-* Kali NetHunter patches
 * SELinux **Permissive**
-* USB HID support
-* External USB Wi-Fi monitor mode + injection
-* Driver's Modules support for multiple USB Wi-Fi chipsets
-* CANbus support
-* Bluetooth Subsystem Support
-* Overclock:
-  
-  * CPU Stock Speeds
-  * GPU Overclocked to 1.15GHz
-* Force module unload support
-* External module loading supported via NetHunter app
+* USB OTG Support
+* USB HID Support (Emulating Keyboard and Mouse)
+* Wi-Fi Monitor mode and Injection for external adapters
+* BT Subsystem support (some chipsets may need their firmware in **/vendor/firmware**)
+* CANBus Subsystem Support
+* NFS Support
+* SDR Support
 
 ---
 
 ## Bugs
 
 * Internal Wi-Fi injection not supported (hardware limitation)
+
+---
+
+## Wi-Fi Drivers
+
+**Tested**
+
+* RTL8821CU
+* RTL8192EU
+* ZD1211/ZD1211B
+
+**Built-in but untested**
+
+* ATH: ATH6KL, AR9170
+* MediaTek: MT7601U
+* Ralink: RT2x00, RT2500USB, RT2800USB
+* Realtek:
+  
+  * RTL88XXAU **Module**
+  * RTL8192EU **Module**
+  * RTL8188EU/CU
+  * RTL8192CU
+  * RTL8821CU **Module**
+  * RTL8187/RTL8187B
+* ZyDas: ZD1201, ZD1211/ZD1211B
 
 ---
 
@@ -63,28 +83,6 @@ Not affiliated with Offensive Security or Kali NetHunter.
 1. Boot to recovery
 2. Install kernel zip
 3. Reboot
-
----
-
-## Wi-Fi Drivers
-
-**Tested**
-
-* RTL8821CU
-* RTL8192EU
-* ZD1211/ZD1211B
-
-**Built-in but untested**
-
-* ATH: ATH6KL, AR9170
-* MediaTek: MT7601U
-* Ralink: RT2x00, RT2500USB, RT2800USB
-* Realtek:
-
-  * RTL88XXAU **Module**
-  * RTL8192EU **Module**
-  * RTL8821CU **Module**
-* ZyDas: ZD1201, ZD1211/ZD1211B
 
 ---
 
