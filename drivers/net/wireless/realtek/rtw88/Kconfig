@@ -1,0 +1,6 @@
+config RTW88
+	tristate "Realtek RTW88 USB WiFi"
+	depends on USB
+	help
+	  Help message of RTW88
+
