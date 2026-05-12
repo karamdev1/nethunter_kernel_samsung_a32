@@ -21,7 +21,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 ## Key Features
 
 * Integrated **KernelSU Next v3.2.0-legacy** (Working & Tested)
-* SELinux **Permissive**
+* SELinux **Switchable between Enforce and Permissive** (Switch NetHunter Settings or commands **setenforce 1** for **Enforce** and **setenforce 0** for **Permissive**)
 * USB OTG Support
 * USB HID Support (Emulating Keyboard and Mouse)
 * Wi-Fi Monitor mode and Injection for external adapters
