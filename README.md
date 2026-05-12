@@ -1,4 +1,4 @@
-# NetHunter Kernel v4.1 — Samsung Galaxy A32 4G (SM-A325x)
+# NetHunter Kernel v4.2 — Samsung Galaxy A32 4G (SM-A325x)
 
 Custom NetHunter-ready kernel built for stability, performance tuning, and external adapter penetration testing.
 
