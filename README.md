@@ -1,4 +1,4 @@
-# NetHunter Kernel v4.2 — Samsung Galaxy A32 4G (SM-A325x)
+# NetHunter Kernel v4.2 — Samsung A32 4G (SM-A325 variants), Samsung Galaxy A22 4G (SM-A225 variants), Samsung F22 4G (SM-E225F) and Samsung M32 4G (SM-M225FV)
 
 Custom NetHunter-ready kernel built for stability, performance tuning, and external adapter penetration testing.
 
@@ -24,11 +24,14 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * SELinux **Permissive**
 * USB OTG Support
 * USB HID Support (Emulating Keyboard and Mouse)
+* USB Mass Storage Support
 * Wi-Fi Monitor mode and Injection for external adapters
-* BT Subsystem support (some chipsets may need their firmware in **/vendor/firmware**)
+* BT Subsystem support wth RFCOMM, HIDP and BNEP (some chipsets may need their firmware in **/vendor/firmware**)
 * CANBus Subsystem Support
 * NFS Support
-* SDR Support
+* AirSpy
+* HackRF
+* Mirics MSi2500
 
 ---
 
@@ -65,7 +68,10 @@ Not affiliated with Offensive Security or Kali NetHunter.
 
 ## Supported Devices
 
-* Samsung Galaxy A32 4G (SM-A325x variants)
+* Samsung Galaxy A32 4G (SM-A325 variants) (Tested)
+* Samsung Galaxy A22 4G (SM-A225 variants) (Not tested)
+* Samsung Galaxy F22 4G (SM-E225F) (Not tested)
+* Samsung Galaxy M32 4G (SM-M225FV) (Not tested)
 
 ---
 
@@ -74,7 +80,10 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * Unlocked bootloader
 * Custom recovery (recommended)
 
-[TWRP Build](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
+[TWRP Build for A32](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
+[TWRP Build for A22](https://xdaforums.com/t/recovery-unofficial-twrp-for-galaxy-a22-sm-a225f-a225m-android-11-12.4333305/) (Not verified working)
+[TWRP Build for F22](https://xdaforums.com/t/f22-recovery-unofficial-twrp-3-6-11-recovery-for-f22-4g-sm-e225f-ds.4444187/) (Not verified working)
+[TWRP Build for M32](https://xdaforums.com/t/m32-recovery-unofficial-twrp-3-6-11-recovery-for-m32-4g-sm-m325f-fv.4439319/) (Not verified working)
 
 ---
 
