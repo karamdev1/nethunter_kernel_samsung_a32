@@ -1,4 +1,4 @@
-# NetHunter Kernel v4.2 — Samsung A32 4G (SM-A325 variants), Samsung Galaxy A22 4G (SM-A225 variants), Samsung F22 4G (SM-E225F) and Samsung M32 4G (SM-M225FV)
+# NetHunter Kernel v4.2 — SM-A325 variants, SM-A225 variants, SM-E225F and SM-M225FV
 
 Custom NetHunter-ready kernel built for stability, performance tuning, and external adapter penetration testing.
 
