@@ -80,9 +80,9 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * Unlocked bootloader
 * Custom recovery (recommended)
 
-[TWRP Build for A32](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227)
-[TWRP Build for A22](https://xdaforums.com/t/recovery-unofficial-twrp-for-galaxy-a22-sm-a225f-a225m-android-11-12.4333305/) (Not verified working)
-[TWRP Build for F22](https://xdaforums.com/t/f22-recovery-unofficial-twrp-3-6-11-recovery-for-f22-4g-sm-e225f-ds.4444187/) (Not verified working)
+[TWRP Build for A32](https://github.com/Luminous418/twrp_device_samsung_a32/releases/tag/TWRP-3.7.0_12.1-a32-20251227) <br>
+[TWRP Build for A22](https://xdaforums.com/t/recovery-unofficial-twrp-for-galaxy-a22-sm-a225f-a225m-android-11-12.4333305/) (Not verified working) <br>
+[TWRP Build for F22](https://xdaforums.com/t/f22-recovery-unofficial-twrp-3-6-11-recovery-for-f22-4g-sm-e225f-ds.4444187/) (Not verified working) <br>
 [TWRP Build for M32](https://xdaforums.com/t/m32-recovery-unofficial-twrp-3-6-11-recovery-for-m32-4g-sm-m325f-fv.4439319/) (Not verified working)
 
 ---
