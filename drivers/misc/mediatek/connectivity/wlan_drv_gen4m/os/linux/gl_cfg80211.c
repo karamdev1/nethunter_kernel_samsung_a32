@@ -152,9 +152,7 @@ mtk_cfg80211_change_iface(struct wiphy *wiphy,
 		rOpMode.eOpMode = NET_TYPE_INFRA;
 	else if (type == NL80211_IFTYPE_ADHOC)
 		rOpMode.eOpMode = NET_TYPE_IBSS;
-	else if (type == NL80211_IFTYPE_MONITOR) {
-		goto handle_monitor_mode;
-	} else
+	else
 		return -EINVAL;
 	rOpMode.ucBssIdx = ucBssIndex;
 	rStatus = kalIoctl(prGlueInfo, wlanoidSetInfrastructureMode,
@@ -165,88 +163,6 @@ mtk_cfg80211_change_iface(struct wiphy *wiphy,
 		DBGLOG(REQ, WARN, "set infrastructure mode error:%x\n",
 		       rStatus);
 
-	goto finalize_context;
-
-	handle_monitor_mode:
-#if CFG_SUPPORT_SNIFFER
-    {
-        struct ADAPTER *prAdapter = prGlueInfo->prAdapter;
-        struct BSS_INFO *prAisBssInfo = NULL;
-        struct PARAM_CUSTOM_MONITOR_SET_STRUCT rMntrSet;
-
-        /* Baseline 2.4GHz safe fallbacks */
-        uint8_t ucBand = 1;
-        uint8_t ucPriChannel = 6;
-        uint8_t ucSco = 0;
-        uint8_t ucChannelWidth = 0;
-        uint8_t ucChannelS1 = 6;
-        uint8_t ucChannelS2 = 0;
-
-        if (prAdapter) {
-			prAisBssInfo = prAdapter->aprBssInfo[AIS_DEFAULT_INDEX];
-			if (prAisBssInfo && prAisBssInfo->fgIsNetActive) {
-				ucBand = (uint8_t)prAisBssInfo->eBand;
-				ucPriChannel = prAisBssInfo->ucPrimaryChannel;
-				ucSco = prAisBssInfo->ucHtOpInfo1 & 0x03; 
-				ucChannelWidth = prAisBssInfo->ucVhtChannelWidth; 
-				ucChannelS1 = prAisBssInfo->ucVhtChannelFrequencyS1;
-				ucChannelS2 = prAisBssInfo->ucVhtChannelFrequencyS2;
-
-				DBGLOG(REQ, INFO, "CFG80211 Monitor Sync: AP Connected. Band:%d, PriCh:%d, Width:%d, S1:%d\n",
-					   ucBand, ucPriChannel, ucChannelWidth, ucChannelS1);
-
-				prAisBssInfo->fgIsNetActive = FALSE;
-
-				if (prGlueInfo && prGlueInfo->prDevHandler) {
-					netif_carrier_off(prGlueInfo->prDevHandler);
-				}
-			} else {
-				DBGLOG(REQ, INFO, "CFG80211 Monitor Sync: Radio Idle. Deploying baseline 2.4GHz parameters.\n");
-			}
-		}
-
-        prGlueInfo->fgIsEnableMon = TRUE;
-
-        if (prGlueInfo->monWork.func) {
-            DBGLOG(REQ, INFO, "Scheduling native wlanMonWorkHandler...\n");
-            schedule_work(&prGlueInfo->monWork);
-        } else {
-            DBGLOG(REQ, WARN, "monWork handler not initialized!\n");
-            return -EIO;
-        }
-
-        memset(&rMntrSet, 0, sizeof(rMntrSet));
-        rMntrSet.ucEnable = 1;
-        rMntrSet.ucBand = ucBand;
-        rMntrSet.ucPriChannel = ucPriChannel;
-        rMntrSet.ucSco = ucSco;
-        rMntrSet.ucChannelWidth = ucChannelWidth;
-        rMntrSet.ucChannelS1 = ucChannelS1;
-        rMntrSet.ucChannelS2 = ucChannelS2;
-
-        DBGLOG(REQ, INFO, "Routing monitor interface request to firmware command loop...\n");
-        rStatus = wlanSendSetQueryCmd(prGlueInfo->prAdapter,
-                          CMD_ID_SET_MONITOR,
-                          TRUE, FALSE, TRUE,
-                          nicCmdEventSetCommon, nicOidCmdTimeoutCommon,
-                          sizeof(rMntrSet), NULL, &rMntrSet, sizeof(rMntrSet));
-
-        if (rStatus != WLAN_STATUS_SUCCESS) {
-            DBGLOG(REQ, WARN, "Firmware rejected CMD_ID_SET_MONITOR command: %x\n", rStatus);
-            prGlueInfo->fgIsEnableMon = FALSE;
-            return -EIO;
-        }
-
-        ndev->ieee80211_ptr->iftype = type;
-
-        return 0;
-    }
-#else
-    DBGLOG(REQ, WARN, "Monitor mode request blocked: CFG_SUPPORT_SNIFFER is disabled.\n");
-    return -EOPNOTSUPP;
-#endif
-
-	finalize_context:
 	prWpaInfo = aisGetWpaInfo(prGlueInfo->prAdapter,
 		ucBssIndex);
 

@@ -407,12 +407,6 @@ static const struct ieee80211_iface_limit mtk_p2p_sta_go_limits[] = {
 		.types = BIT(NL80211_IFTYPE_P2P_GO)
 				| BIT(NL80211_IFTYPE_P2P_CLIENT),
 	},
-
-	/* Permit up to 1 concurrent explicit monitor interface instance */
-	{
-		.max = 1,
-		.types = BIT(NL80211_IFTYPE_MONITOR),
-	},
 };
 
 #if (CFG_SUPPORT_DFS_MASTER == 1)

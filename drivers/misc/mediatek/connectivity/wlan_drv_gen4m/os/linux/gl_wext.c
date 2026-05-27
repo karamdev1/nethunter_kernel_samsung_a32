@@ -1269,8 +1269,8 @@ wext_get_freq(IN struct net_device *prNetDev,
 /*----------------------------------------------------------------------------*/
 static int
 wext_set_mode(IN struct net_device *prNetDev,
-	  IN struct iw_request_info *prIwReqInfo,
-	  IN unsigned int *pu4Mode, IN char *pcExtra)
+	      IN struct iw_request_info *prIwReqInfo,
+	      IN unsigned int *pu4Mode, IN char *pcExtra)
 {
 	struct PARAM_OP_MODE rOpMode;
 	struct GLUE_INFO *prGlueInfo = NULL;
@@ -1298,88 +1298,20 @@ wext_set_mode(IN struct net_device *prNetDev,
 		rOpMode.eOpMode = NET_TYPE_INFRA;
 		break;
 
-	case IW_MODE_MONITOR:
-		goto handle_wext_monitor;
-
 	default:
 		DBGLOG(INIT, INFO, "%s(): Set UNSUPPORTED Mode = %d.\n",
-			   __func__, *pu4Mode);
+		       __func__, *pu4Mode);
 		return -EOPNOTSUPP;
 	}
 
+	/* printk("%s(): Set Mode = %d\n", __FUNCTION__, *pu4Mode); */
 	rOpMode.ucBssIdx = ucBssIndex;
 	rStatus = kalIoctl(prGlueInfo, wlanoidSetInfrastructureMode,
 		(void *)&rOpMode, sizeof(struct PARAM_OP_MODE),
 		FALSE, FALSE, TRUE, &u4BufLen);
 
-	if (rStatus != WLAN_STATUS_SUCCESS) {
-		DBGLOG(REQ, WARN, "WEXT set infrastructure mode error:%x\n", rStatus);
-		return -EFAULT;
-	}
+	/* after set operation mode, key table are cleared */
 
-	goto finalize_wext_context;
-
-handle_wext_monitor:
-#if CFG_SUPPORT_SNIFFER
-    {
-        struct ADAPTER *prAdapter = prGlueInfo->prAdapter;
-        struct PARAM_CUSTOM_MONITOR_SET_STRUCT rMntrSet;
-
-        if (prAdapter) {
-            /* 1. Abort any active background scans on the current BSS index */
-            aisFsmStateAbort_SCAN(prGlueInfo->prAdapter,
-                      wlanGetBssIdx(prNetDev));
-
-            /* 2. Inform the Linux network stack that the data link layer is down */
-            netif_carrier_off(prNetDev);
-            netif_tx_stop_all_queues(prNetDev);
-
-            msleep(150);
-        }
-
-        /* 3. Clear and populate the 16-byte hardware payload */
-        /* 3. Clear and populate the hardware payload to match native macros */
-        kalMemZero(&rMntrSet, sizeof(rMntrSet));
-        rMntrSet.ucEnable = 1;                         /* Turn monitor mode ON */
-        rMntrSet.ucPriChannel = 6;                     /* Default safe fallback channel */
-        rMntrSet.ucChannelWidth = (uint8_t) CW_20_40MHZ; /* Native driver 20/40 macro value */
-        rMntrSet.ucSco = (uint8_t) CHNL_EXT_SCN;       /* Native driver Extension None macro */
-        rMntrSet.ucChannelS1 = 0;
-        rMntrSet.ucChannelS2 = 0;
-
-        prGlueInfo->fgIsEnableMon = TRUE;
-
-        msleep(50);
-
-        DBGLOG(REQ, INFO, "WEXT: Transmission of hardware monitor payload dispatched to firmware loop.\n");
-        rStatus = wlanSendSetQueryCmd(
-            prGlueInfo->prAdapter,
-            CMD_ID_SET_MONITOR,
-            TRUE, FALSE, TRUE,
-            nicCmdEventSetCommon,
-            nicOidCmdTimeoutCommon,
-            sizeof(rMntrSet),
-            NULL,
-            &rMntrSet,
-            sizeof(rMntrSet)
-        );
-
-        DBGLOG(REQ, INFO, "SET_MONITOR status = %x\n", rStatus);
-
-        if (rStatus != WLAN_STATUS_SUCCESS) {
-            DBGLOG(REQ, WARN, "WEXT: Hardware rejected configuration payload. Error Code: %x\n", rStatus);
-            prGlueInfo->fgIsEnableMon = FALSE; 
-            return -EIO;
-        }
-
-        return 0;
-    }
-#else
-    return -EOPNOTSUPP;
-#endif
-
-finalize_wext_context:
-	/* printk("%s(): Set Mode = %d\n", __FUNCTION__, *pu4Mode); */
 	prWpaInfo = aisGetWpaInfo(prGlueInfo->prAdapter,
 		ucBssIndex);
 

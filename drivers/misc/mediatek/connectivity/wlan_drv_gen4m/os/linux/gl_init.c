@@ -1931,7 +1931,6 @@ static int wlanMonOpen(struct net_device *prDev)
 {
 	ASSERT(prDev);
 
-	netif_carrier_on(prDev);
 	netif_tx_start_all_queues(prDev);
 
 	return 0;		/* success */
@@ -1941,7 +1940,6 @@ static int wlanMonStop(struct net_device *prDev)
 {
 	ASSERT(prDev);
 
-	netif_carrier_off(prDev);
 	netif_tx_stop_all_queues(prDev);
 
 	return 0;		/* success */
@@ -1954,83 +1952,57 @@ static const struct net_device_ops wlan_mon_netdev_ops = {
 
 void wlanMonWorkHandler(struct work_struct *work)
 {
-    struct GLUE_INFO *prGlueInfo;
+	struct GLUE_INFO *prGlueInfo;
 
-    prGlueInfo = container_of(work, struct GLUE_INFO, monWork);
+	prGlueInfo = container_of(work, struct GLUE_INFO, monWork);
 
-    if (prGlueInfo->fgIsEnableMon) {
-        if (prGlueInfo->prMonDevHandler)
-            return;
-
+	if (prGlueInfo->fgIsEnableMon) {
+		if (prGlueInfo->prMonDevHandler)
+			return;
 #if KERNEL_VERSION(3, 18, 0) <= LINUX_VERSION_CODE
-        prGlueInfo->prMonDevHandler =
-            alloc_netdev_mq(sizeof(struct NETDEV_PRIVATE_GLUE_INFO),
-                    NIC_MONITOR_INF_NAME,
-                    NET_NAME_PREDICTABLE, ether_setup,
-                    CFG_MAX_TXQ_NUM);
+		prGlueInfo->prMonDevHandler =
+			alloc_netdev_mq(sizeof(struct NETDEV_PRIVATE_GLUE_INFO),
+					NIC_MONITOR_INF_NAME,
+					NET_NAME_PREDICTABLE, ether_setup,
+					CFG_MAX_TXQ_NUM);
 #else
-        prGlueInfo->prMonDevHandler =
-            alloc_netdev_mq(sizeof(struct NETDEV_PRIVATE_GLUE_INFO),
-                    NIC_MONITOR_INF_NAME,
-                    ether_setup, CFG_MAX_TXQ_NUM);
+		prGlueInfo->prMonDevHandler =
+			alloc_netdev_mq(sizeof(struct NETDEV_PRIVATE_GLUE_INFO),
+					NIC_MONITOR_INF_NAME,
+					ether_setup, CFG_MAX_TXQ_NUM);
 #endif
-        if (prGlueInfo->prMonDevHandler == NULL) {
-            DBGLOG(INIT, ERROR,
-                   "wlanMonWorkHandler: Allocated prMonDevHandler context FAIL.\n");
-            return;
-        }
+		if (prGlueInfo->prMonDevHandler == NULL) {
+			DBGLOG(INIT, ERROR,
+			       "wlanMonWorkHandler: Allocated prMonDevHandler context FAIL.\n");
+			return;
+		}
 
-        ((struct NETDEV_PRIVATE_GLUE_INFO *) netdev_priv(
-             prGlueInfo->prMonDevHandler))->prGlueInfo = prGlueInfo;
+		((struct NETDEV_PRIVATE_GLUE_INFO *) netdev_priv(
+			 prGlueInfo->prMonDevHandler))->prGlueInfo = prGlueInfo;
+		prGlueInfo->prMonDevHandler->type =
+			ARPHRD_IEEE80211_RADIOTAP;
+		prGlueInfo->prMonDevHandler->netdev_ops =
+			&wlan_mon_netdev_ops;
+		netif_carrier_off(prGlueInfo->prMonDevHandler);
+		netif_tx_stop_all_queues(prGlueInfo->prMonDevHandler);
+		kalResetStats(prGlueInfo->prMonDevHandler);
 
-        prGlueInfo->prMonDevHandler->type = ARPHRD_IEEE80211_RADIOTAP;
-        prGlueInfo->prMonDevHandler->flags |= IFF_NOARP;
-        prGlueInfo->prMonDevHandler->priv_flags |= IFF_DONT_BRIDGE;
-
-        /* Allocate a dedicated independent wireless device structure */
-        prGlueInfo->prMonDevHandler->ieee80211_ptr =
-            kzalloc(sizeof(struct wireless_dev), GFP_KERNEL);
-
-        if (!prGlueInfo->prMonDevHandler->ieee80211_ptr) {
-            DBGLOG(INIT, ERROR, "wlanMonWorkHandler: Memory allocation for ieee80211_ptr failed.\n");
-            free_netdev(prGlueInfo->prMonDevHandler);
-            prGlueInfo->prMonDevHandler = NULL;
-            return;
-        }
-
-        /* Set configuration flags specifically on the new independent structure */
-        prGlueInfo->prMonDevHandler->ieee80211_ptr->iftype = NL80211_IFTYPE_MONITOR;
-        prGlueInfo->prMonDevHandler->ieee80211_ptr->netdev = prGlueInfo->prMonDevHandler;
-
-        prGlueInfo->prMonDevHandler->netdev_ops = &wlan_mon_netdev_ops;
-        netif_carrier_off(prGlueInfo->prMonDevHandler);
-        netif_tx_stop_all_queues(prGlueInfo->prMonDevHandler);
-        kalResetStats(prGlueInfo->prMonDevHandler);
-
-        if (register_netdev(prGlueInfo->prMonDevHandler) < 0) {
-            DBGLOG(INIT, ERROR,
-                   "wlanMonWorkHandler: Registered prMonDevHandler context FAIL.\n");
-            kfree(prGlueInfo->prMonDevHandler->ieee80211_ptr);
-            free_netdev(prGlueInfo->prMonDevHandler);
-            prGlueInfo->prMonDevHandler = NULL;
-            return;
-        }
-        DBGLOG(INIT, INFO,
-               "wlanMonWorkHandler: Registered prMonDevHandler context DONE.\n");
-    } else {
-        if (prGlueInfo->prMonDevHandler) {
-            /* Safely clean up the allocated tracking structure before unregistering */
-            if (prGlueInfo->prMonDevHandler->ieee80211_ptr) {
-                kfree(prGlueInfo->prMonDevHandler->ieee80211_ptr);
-                prGlueInfo->prMonDevHandler->ieee80211_ptr = NULL;
-            }
-
-            unregister_netdev(prGlueInfo->prMonDevHandler);
-            prGlueInfo->prMonDevHandler = NULL;
-            DBGLOG(INIT, INFO,
-                   "wlanMonWorkHandler: unRegistered prMonDevHandler context DONE.\n");
-        }
-    }
+		if (register_netdev(prGlueInfo->prMonDevHandler) < 0) {
+			DBGLOG(INIT, ERROR,
+			       "wlanMonWorkHandler: Registered prMonDevHandler context FAIL.\n");
+			free_netdev(prGlueInfo->prMonDevHandler);
+			prGlueInfo->prMonDevHandler = NULL;
+		}
+		DBGLOG(INIT, INFO,
+		       "wlanMonWorkHandler: Registered prMonDevHandler context DONE.\n");
+	} else {
+		if (prGlueInfo->prMonDevHandler) {
+			unregister_netdev(prGlueInfo->prMonDevHandler);
+			prGlueInfo->prMonDevHandler = NULL;
+			DBGLOG(INIT, INFO,
+			       "wlanMonWorkHandler: unRegistered prMonDevHandler context DONE.\n");
+		}
+	}
 }
 #endif
 
@@ -2634,10 +2606,9 @@ static void wlanCreateWirelessDevice(void)
 		mtk_iface_combinations_p2p_num;
 
 	prWiphy->interface_modes |= BIT(NL80211_IFTYPE_AP) |
-                    BIT(NL80211_IFTYPE_P2P_CLIENT) |
-                    BIT(NL80211_IFTYPE_P2P_GO) |
-                    BIT(NL80211_IFTYPE_STATION) |
-                    BIT(NL80211_IFTYPE_MONITOR);
+				    BIT(NL80211_IFTYPE_P2P_CLIENT) |
+				    BIT(NL80211_IFTYPE_P2P_GO) |
+				    BIT(NL80211_IFTYPE_STATION);
 	prWiphy->software_iftypes |= BIT(NL80211_IFTYPE_P2P_DEVICE);
 	prWiphy->flags |= WIPHY_FLAG_HAS_REMAIN_ON_CHANNEL;
 	prWiphy->flags |= WIPHY_FLAG_HAVE_AP_SME;

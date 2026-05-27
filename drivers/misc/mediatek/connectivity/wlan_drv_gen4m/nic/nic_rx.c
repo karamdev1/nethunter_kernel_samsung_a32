@@ -72,8 +72,6 @@
  */
 #include "precomp.h"
 #include "que_mgt.h"
-#include <linux/if_ether.h>
-#include <linux/ieee80211.h>
 #include "wnm.h"
 
 /*******************************************************************************
@@ -1406,8 +1404,6 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 	uint32_t u4PhyRate;
 	struct RX_DESC_OPS_T *prRxDescOps;
 	enum ENUM_BAND eBand = 0;
-	/* Reference glue info context safely */
-	struct GLUE_INFO *prGlueInfo = NULL;
 
 #if CFG_SUPPORT_MULTITHREAD
 	KAL_SPIN_LOCK_DECLARATION();
@@ -1417,19 +1413,17 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 
 	ASSERT(prAdapter);
 	ASSERT(prSwRfb);
-	
-	prGlueInfo = prAdapter->prGlueInfo;
 	prRxDescOps = prAdapter->chip_info->prRxDescOps;
+
 	prRxCtrl = &prAdapter->rRxCtrl;
 
 	nicRxFillRFB(prAdapter, prSwRfb);
 
-	if (!prGlueInfo || !prGlueInfo->fgIsEnableMon) {
-		if (!(prSwRfb->ucGroupVLD & BIT(RX_GROUP_VLD_2)) ||
-			!(prSwRfb->ucGroupVLD & BIT(RX_GROUP_VLD_3))) {
-			nicRxReturnRFB(prAdapter, prSwRfb);
-			return;
-		}
+	/* can't parse radiotap info if no rx vector */
+	if (((prSwRfb->ucGroupVLD & BIT(RX_GROUP_VLD_2)) == 0)
+	    || ((prSwRfb->ucGroupVLD & BIT(RX_GROUP_VLD_3)) == 0)) {
+		nicRxReturnRFB(prAdapter, prSwRfb);
+		return;
 	}
 
 	prRxStatus = prSwRfb->prRxStatus;
@@ -1445,9 +1439,9 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 	rRadiotapFieldVendor.u2DataLen = u4VendorNsLen - 6;
 	/* VHTA1 B0-B1 */
 	rRadiotapFieldVendor.ucData = (((
-			prRxStatusGroup3)->u4RxVector[0]
-				& RX_VT_FR_MODE_MASK) >>
-				RX_VT_FR_MODE_OFFSET);
+		prRxStatusGroup3)->u4RxVector[0]
+			& RX_VT_FR_MODE_MASK) >>
+			RX_VT_FR_MODE_OFFSET);
 
 	ucRxMode = (((prRxStatusGroup3)->u4RxVector[0] &
 		     RX_VT_RX_MODE_MASK) >> RX_VT_RX_MODE_OFFSET);
@@ -1465,15 +1459,13 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 	}
 
 	/* Radiotap Header & Bit Number 30 Vendor Namespace */
-	kalMemSet(&rMonitorRadiotap, 0, sizeof(struct MONITOR_RADIOTAP));
-
-	/* now safe to compute offsets */
-	prVendorNsOffset = (uint8_t *)&rMonitorRadiotap + u4RadiotapLen;
+	prVendorNsOffset = (uint8_t *) &rMonitorRadiotap +
+			   u4RadiotapLen;
 	u4RadiotapLen += u4VendorNsLen;
-
+	kalMemSet(&rMonitorRadiotap, 0,
+		  sizeof(struct MONITOR_RADIOTAP));
 	kalMemCopy(prVendorNsOffset,
-			(uint8_t *)&rRadiotapFieldVendor,
-			u4VendorNsLen);
+		   (uint8_t *) &rRadiotapFieldVendor, u4VendorNsLen);
 	rMonitorRadiotap.u2ItLen = cpu_to_le16(u4RadiotapLen);
 	rMonitorRadiotap.u4ItPresent = u4ItPresent;
 
@@ -1501,7 +1493,7 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 		ucFrMode = (((prRxStatusGroup3)->u4RxVector[0] &
 			     RX_VT_FR_MODE_MASK) >> RX_VT_FR_MODE_OFFSET);
 		ucShortGI = ((prRxStatusGroup3)->u4RxVector[0] &
-			     RX_VT_SHORT_GI) ? 1 : 0;   /* VHTA2 B0 */
+			     RX_VT_SHORT_GI) ? 1 : 0;	/* VHTA2 B0 */
 
 		/* ucRate(500kbs) = u4PhyRate(100kbps) / 5, max ucRate = 0xFF */
 		u4PhyRate = nicGetPhyRateByMcsRate(ucMcs, ucFrMode,
@@ -1515,7 +1507,7 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 	/* Bit Number 3 CHANNEL */
 	if (ucRxMode == RX_VT_LEGACY_CCK)
 		rMonitorRadiotap.u2ChFlags |= BIT(5);
-	else                    /* OFDM */
+	else			/* OFDM */
 		rMonitorRadiotap.u2ChFlags |= BIT(6);
 
 	RX_STATUS_GET(prRxDescOps, ucChanNum, get_ch_num, prRxStatus);
@@ -1523,7 +1515,7 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 	if (eBand == BAND_2G4) {
 		rMonitorRadiotap.u2ChFlags |= BIT(7);
 		rMonitorRadiotap.u2ChFrequency = (ucChanNum * 5 + 2407);
-	} else {                /* BAND_5G */
+	} else {		/* BAND_5G */
 		rMonitorRadiotap.u2ChFlags |= BIT(8);
 		rMonitorRadiotap.u2ChFrequency = (ucChanNum * 5 + 5000);
 	}
@@ -1564,43 +1556,24 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 	prSkb = (struct sk_buff *)(prSwRfb->pvPacket);
 	prSkb->data = (unsigned char *)(prSwRfb->pvHeader);
 
-	prSkb->data = (unsigned char *)prSwRfb->pvHeader;
 	skb_reset_tail_pointer(prSkb);
 	skb_trim(prSkb, 0);
+	skb_put(prSkb, (u4RadiotapLen + prSwRfb->u2PacketLen));
 
-	if (skb_tailroom(prSkb) >= (u4RadiotapLen + prSwRfb->u2PacketLen)) {
-		skb_put(prSkb, u4RadiotapLen + prSwRfb->u2PacketLen);
-	} else {
-		DBGLOG(RX, WARN, "skb tailroom insufficient\n");
-		nicRxReturnRFB(prAdapter, prSwRfb);
-		return;
-	}
-
-	if (prGlueInfo && prGlueInfo->fgIsEnableMon && prGlueInfo->prMonDevHandler) {
-		skb_reset_mac_header(prSkb);
-		prSkb->dev = prGlueInfo->prMonDevHandler;
-		prSkb->pkt_type = PACKET_OTHERHOST;
-		prSkb->protocol = htons(ETH_P_802_2);
-		netif_rx_ni(prSkb);
-		prSwRfb->pvPacket = NULL;
-		return;
-	} else {
-		/* Fallback to MediaTek's native delivery ring queue */
 #if CFG_SUPPORT_MULTITHREAD
-		KAL_ACQUIRE_SPIN_LOCK(prAdapter, SPIN_LOCK_RX_TO_OS_QUE);
-		QUEUE_INSERT_TAIL(&(prAdapter->rRxQueue),
-				  (struct QUE_ENTRY *) GLUE_GET_PKT_QUEUE_ENTRY(
-					  prSwRfb->pvPacket));
-		KAL_RELEASE_SPIN_LOCK(prAdapter, SPIN_LOCK_RX_TO_OS_QUE);
+	KAL_ACQUIRE_SPIN_LOCK(prAdapter, SPIN_LOCK_RX_TO_OS_QUE);
+	QUEUE_INSERT_TAIL(&(prAdapter->rRxQueue),
+			  (struct QUE_ENTRY *) GLUE_GET_PKT_QUEUE_ENTRY(
+				  prSwRfb->pvPacket));
+	KAL_RELEASE_SPIN_LOCK(prAdapter, SPIN_LOCK_RX_TO_OS_QUE);
 
-		prRxCtrl->ucNumIndPacket++;
-		kalSetTxEvent2Rx(prAdapter->prGlueInfo);
+	prRxCtrl->ucNumIndPacket++;
+	kalSetTxEvent2Rx(prAdapter->prGlueInfo);
 #else
-		prRxCtrl->apvIndPacket[prRxCtrl->ucNumIndPacket] =
-			prSwRfb->pvPacket;
-		prRxCtrl->ucNumIndPacket++;
+	prRxCtrl->apvIndPacket[prRxCtrl->ucNumIndPacket] =
+		prSwRfb->pvPacket;
+	prRxCtrl->ucNumIndPacket++;
 #endif
-	}
 
 	prSwRfb->pvPacket = NULL;
 	/* Return RFB */
