@@ -26,7 +26,7 @@ Not affiliated with Offensive Security or Kali NetHunter.
 * USB HID Support (Emulating Keyboard and Mouse)
 * USB Mass Storage Support
 * Wi-Fi Monitor mode and Injection for external adapters
-* BT Subsystem support wth RFCOMM, HIDP and BNEP (some chipsets may need their firmware in **/vendor/firmware**)
+* BT Subsystem support with RFCOMM, HIDP and BNEP (some chipsets may need their firmware in **/vendor/firmware**)
 * CANBus Subsystem Support
 * NFS Support
 * AirSpy
