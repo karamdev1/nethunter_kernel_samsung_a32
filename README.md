@@ -4,7 +4,10 @@ Custom NetHunter-ready kernel built for stability, performance tuning, and exter
 
 ---
 
-## [Download from Google Drive](https://drive.google.com/drive/folders/1-WTgc8WdROdaQjSQCMAMkMX8YOPUw8yN?usp=drive_link)
+## [Download from Google Drive A32](https://drive.google.com/drive/folders/1-WTgc8WdROdaQjSQCMAMkMX8YOPUw8yN?usp=drive_link)
+## [Download from Google Drive A22](https://drive.google.com/drive/folders/1_725Sk8eJ_97ctm967O_CFGTl7GvcN4w?usp=drive_link)
+## [Download from Google Drive F22](https://drive.google.com/drive/folders/1YPi3GAk-PEPLbTFX38_qPiQfWowE7GWa?usp=drive_link)
+## [Download from Google Drive M32](https://drive.google.com/drive/folders/1ix-UFToKluOMuJOvIOX6acx9EjLs4_wO?usp=drive_link)
 ## [Kernel Source](https://github.com/Samsung-MT6769-Devs/android_kernel_samsung_mt6768)
 
 ---
