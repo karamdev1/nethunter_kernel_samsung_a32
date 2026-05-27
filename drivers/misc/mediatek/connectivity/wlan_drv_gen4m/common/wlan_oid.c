@@ -1669,6 +1669,14 @@ wlanoidSetInfrastructureMode(IN struct ADAPTER *prAdapter,
 		return WLAN_STATUS_INVALID_DATA;
 	}
 
+	if (eOpMode == NET_TYPE_MONITOR) {
+        prConnSettings->eOPMode = eOpMode;
+        if (pu4SetInfoLen)
+            *pu4SetInfoLen = sizeof(struct PARAM_OP_MODE);
+            
+        return WLAN_STATUS_SUCCESS; 
+    }
+
 	/* check if possible to switch to AdHoc mode */
 	if (eOpMode == NET_TYPE_IBSS
 	    || eOpMode == NET_TYPE_DEDICATED_IBSS) {

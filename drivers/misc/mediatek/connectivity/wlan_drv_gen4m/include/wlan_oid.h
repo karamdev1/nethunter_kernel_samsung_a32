@@ -359,6 +359,7 @@ enum ENUM_PARAM_OP_MODE {
 	/*  establish an AdHoc, do periodic SCAN for joining or merging. */
 	NET_TYPE_DEDICATED_IBSS,/*!< Try to merge an AdHoc first, */
 	/* if fail then establish AdHoc permanently, no more SCAN. */
+	NET_TYPE_MONITOR,
 	NET_TYPE_NUM		/* 4 */
 };
 
