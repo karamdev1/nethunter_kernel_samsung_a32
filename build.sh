@@ -20,7 +20,6 @@ export CROSS_COMPILE=$(eval echo $CROSS_COMPILE)
 export CROSS_COMPILE_ARM32=$(eval echo $CROSS_COMPILE_ARM32)
 OUT_DIR=$(eval echo $OUT_DIR)
 KDIR=$(pwd)
-DEFCONFIG=$(eval echo $DEFCONFIG)
 export KCFLAGS=' -w -pipe -O3'
 export ANDROID_MAJOR_VERSION=r
 export KCPPFLAGS=' -O3'
@@ -49,15 +48,16 @@ function show_gui() {
 	echo -e "$BOLDGREEN| Actions:                                            |$ENDCOLOR"
 	echo -e "$BOLDGREEN|-------------------${ENDCOLOR}Kernel$BOLDGREEN----------------------------|$ENDCOLOR"
 	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}1$ENDCOLOR] Compile Kernel                           $BOLDGREEN|$ENDCOLOR"
-	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}2$ENDCOLOR] Compile Module $BOLDBLUE(Doesn't need prepare)    $BOLDGREEN|$ENDCOLOR"
+	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}2$ENDCOLOR] Compile Module $BOLDBLUE(Prepare before Compile!) $BOLDGREEN|$ENDCOLOR"
 	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}3$ENDCOLOR] Prepare Module                           $BOLDGREEN|$ENDCOLOR"
+	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}4$ENDCOLOR] Copy Modules   $BOLDBLUE(Compile before Copy!)    $BOLDGREEN|$ENDCOLOR"
 	echo -e "$BOLDGREEN|-----------------------------------------------------|$ENDCOLOR"
-	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}4$ENDCOLOR] Clean Kernel $BOLDBLUE(Clean & Mrproper)          $BOLDGREEN|$ENDCOLOR"
-	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}5$ENDCOLOR] Apply Defconfig $BOLDBLUE(Selection in Config)    $BOLDGREEN|$ENDCOLOR"
+	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}5$ENDCOLOR] Clean Kernel    $BOLDBLUE(Clean & Mrproper)       $BOLDGREEN|$ENDCOLOR"
+	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}6$ENDCOLOR] Apply Defconfig $BOLDBLUE(Selection in Config)    $BOLDGREEN|$ENDCOLOR"
 	echo -e "$BOLDGREEN|-----------------------------------------------------|$ENDCOLOR"
-	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}6$ENDCOLOR] Edit Config $BOLDBLUE(MENUCONFIG) $BOLDYELLOW(GOOD)          $BOLDGREEN|$ENDCOLOR"
-	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}7$ENDCOLOR] Edit Config $BOLDBLUE(NCONFIG) $BOLDGREEN(BEST)             $BOLDGREEN|$ENDCOLOR"
-	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}8$ENDCOLOR] Save .config as new defconfig            $BOLDGREEN|$ENDCOLOR"
+	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}7$ENDCOLOR] Edit Config $BOLDBLUE(MENUCONFIG) $BOLDYELLOW(GOOD)          $BOLDGREEN|$ENDCOLOR"
+	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}8$ENDCOLOR] Edit Config $BOLDBLUE(NCONFIG) $BOLDGREEN(BEST)             $BOLDGREEN|$ENDCOLOR"
+	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}9$ENDCOLOR] Save .config as new defconfig            $BOLDGREEN|$ENDCOLOR"
 	echo -e "$BOLDGREEN|-------------------${ENDCOLOR}Script$BOLDGREEN----------------------------|$ENDCOLOR"
 	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDRED}E$ENDCOLOR] Exit Builder                             $BOLDGREEN|$ENDCOLOR"
 	echo -e "$BOLDGREEN|        $ENDCOLOR[${BOLDBLUE}G$ENDCOLOR] Open the creator's github page           $BOLDGREEN|$ENDCOLOR"
@@ -81,7 +81,7 @@ while true; do
 				ret=$?
 				if [ $ret -eq 0 ]; then
 					echo -e "$BOLDGREEN[+] Kernel Building Succeed$ENDCOLOR"
-					make -C "$KDIR" O="$OUT_DIR" INSTALL_MOD_PATH="modules" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules_install -j"$(nproc)"
+					make -C "$KDIR" O="$OUT_DIR" INSTALL_MOD_PATH="../out_modules" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules_install -j"$(nproc)"
 					ret=$?
 					if [ $ret -eq 0 ]; then
 						echo -e "$BOLDGREEN[+] You can find the modules in '$OUT_DIR/modules'$ENDCOLOR"
@@ -99,11 +99,11 @@ while true; do
 				echo -e "$BOLDRED[-] No .config found$ENDCOLOR"
 			else
 				echo -e "$BOLDGREEN[+] .config found$ENDCOLOR"
-				make -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules_prepare -j"$(nproc)" && make -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules -j"$(nproc)" && make -C "$KDIR" O="$OUT_DIR" INSTALL_MOD_PATH="modules" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules_install -j"$(nproc)"
+				make -s -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules -j"$(nproc)"
 				ret=$?
 				if [ $ret -eq 0 ]; then
 					echo -e "$BOLDGREEN[+] Modules Building Succeed$ENDCOLOR"
-					echo -e "$BOLDGREEN[+] You can find the modules in '$OUT_DIR/modules'$ENDCOLOR"
+					echo -e "$BOLDGREEN[+] You can find the modules in out_modules$ENDCOLOR"
 				else
 					echo -e "$BOLDRED[-] Modules Building Failed (exit code: $ret)$ENDCOLOR"
 				fi
@@ -115,7 +115,7 @@ while true; do
 				echo -e "$BOLDRED[-] No .config found$ENDCOLOR"
 			else
 				echo -e "$BOLDGREEN[+] .config found$ENDCOLOR"
-				make -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules_prepare -j"$(nproc)"
+				make -s -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules_prepare -j"$(nproc)"
 				ret=$?
 				if [ $ret -eq 0 ]; then
 					echo -e "$BOLDGREEN[+] Preparing Modules Succeed$ENDCOLOR"
@@ -125,7 +125,24 @@ while true; do
 			fi
 			;;
 		4)
+			echo -e "$BOLDGREEN[+] Coping Modules to out_modules$ENDCOLOR"
+			if [ ! -f "$KDIR/$OUT_DIR/.config" ]; then
+				echo -e "$BOLDRED[-] No .config found$ENDCOLOR"
+			else
+				echo -e "$BOLDGREEN[+] .config found$ENDCOLOR"
+				make -C "$KDIR" O="$OUT_DIR" INSTALL_MOD_PATH="../out_modules" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y modules_install -j"$(nproc)"
+				ret=$?
+				if [ $ret -eq 0 ]; then
+					echo -e "$BOLDGREEN[+] Coping Building Succeed$ENDCOLOR"
+					echo -e "$BOLDGREEN[+] You can find the modules in out_modules$ENDCOLOR"
+				else
+					echo -e "$BOLDRED[-] Coping Building Failed (exit code: $ret)$ENDCOLOR"
+				fi
+			fi
+			;;
+		5)
 			echo -e "$BOLDGREEN[+] Cleaning$ENDCOLOR"
+			rm -rf out_modules
 			make -s -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y clean -j"$(nproc)" && make -s -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y mrproper -j"$(nproc)" && make -s -C "$KDIR" O="$KDIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y clean -j"$(nproc)" && make -s -C "$KDIR" O="$KDIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y mrproper -j"$(nproc)"
 			ret=$?
 			if [ $ret -eq 0 ]; then
@@ -134,54 +151,30 @@ while true; do
 				echo -e "$BOLDRED[-] Cleaning Failed (exit code: $ret)$ENDCOLOR"
 			fi
 			;;
-		5)
-			echo -e "$BOLDGREEN[+] Applying $DEFCONFIG$ENDCOLOR"
-			if [ ! -f "$KDIR/arch/$ARCH/configs/$DEFCONFIG" ]; then
-				echo -e "$BOLDRED[-] $DEFCONFIG is not found$ENDCOLOR"
+		6)
+			echo -ne "$BOLDGREEN[+] Enter the defconfig's name: $ENDCOLOR"
+			read config
+			if [ ! -f "$KDIR/arch/$ARCH/configs/$config" ]; then
+				echo -e "$BOLDRED[-] $config is not found$ENDCOLOR"
 			else
-				echo -e "$BOLDGREEN[+] $DEFCONFIG is found$ENDCOLOR"
-				echo -ne "$BOLDRED[!] Want to apply $BOLDYELLOW$DEFCONFIG$BOLDRED?$ENDCOLOR [Y,n]: "
-				read answer
-				case "$answer" in
-					Y|y|'')
-						make -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y $DEFCONFIG -j"$(nproc)"
-						ret=$?
-						if [ $ret -eq 0 ]; then
-							echo -e "$BOLDGREEN[+] Config Applying Succeed$ENDCOLOR"
-						else
-							echo -e "$BOLDRED[-] Config Applying Failed (exit code: $ret)$ENDCOLOR"
-						fi
-						;;
-					N|n)
-						echo -ne "$BOLDGREEN[+] Enter the defconfig's name: $ENDCOLOR"
-						read config
-						if [ ! -f "$KDIR/arch/$ARCH/configs/$config" ]; then
-							echo -e "$BOLDRED[-] $config is not found$ENDCOLOR"
-						else
-							make -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y $config -j"$(nproc)"
-							ret=$?
-							if [ $ret -eq 0 ]; then
-								echo -e "$BOLDGREEN[+] Config Applying Succeed$ENDCOLOR"
-							else
-								echo -e "$BOLDRED[-] Config Applying Failed (exit code: $ret)$ENDCOLOR"
-							fi
-						fi
-						;;
-					*)
-						echo -e "$BOLDRED[!] Invalid Action!!$ENDCOLOR"
-						;;
-				esac
+				make -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y $config -j"$(nproc)"
+				ret=$?
+				if [ $ret -eq 0 ]; then
+					echo -e "$BOLDGREEN[+] Config Applying Succeed$ENDCOLOR"
+				else
+					echo -e "$BOLDRED[-] Config Applying Failed (exit code: $ret)$ENDCOLOR"
+				fi
 			fi
 			;;
-		6)
+		7)
 			echo -e "$BOLDGREEN[+] Editing Config (MENUCONFIG)$ENDCOLOR"
 			make -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y menuconfig -j"$(nproc)"
 			;;
-		7)
+		8)
 			echo -e "$BOLDGREEN[+] Editing Config (NCONFIG)$ENDCOLOR"
 			make -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y nconfig -j"$(nproc)"
 			;;
-		8)
+		9)
 			echo -e "$BOLDGREEN[+] Saving current .config as new defconfig$ENDCOLOR"
 			if [ ! -f "$KDIR/$OUT_DIR/.config" ]; then
 				echo -e "$BOLDRED[!] .config is not found$ENDCOLOR"
@@ -204,16 +197,18 @@ while true; do
 							fi
 							;;
 						N|n|'')
-							echo -e "$BOLDGREEN[+] Saving current .config as $newconfig$ENDCOLOR"
-							cp "$KDIR/$OUT_DIR/.config" "$KDIR/arch/$ARCH/configs/$newconfig"
-							ret=$?
-							if [ $ret -eq 0 ]; then
-								echo -e "$BOLDGREEN[+] Coping succeed$ENDCOLOR"
-							else
-								echo -e "$BOLDRED[-] Coping Failed (exit code: $ret)$ENDCOLOR"
-							fi
+							echo -e "$BOLDGREEN[!] Skipped Saving the new defconfig$ENDCOLOR"
 							;;
 					esac
+				else
+					echo -e "$BOLDGREEN[+] Saving current .config as $newconfig$ENDCOLOR"
+					cp "$KDIR/$OUT_DIR/.config" "$KDIR/arch/$ARCH/configs/$newconfig"
+					ret=$?
+					if [ $ret -eq 0 ]; then
+						echo -e "$BOLDGREEN[+] Coping succeed$ENDCOLOR"
+					else
+						echo -e "$BOLDRED[-] Coping Failed (exit code: $ret)$ENDCOLOR"
+					fi
 				fi
 			fi
 			;;
