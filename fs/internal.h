@@ -64,6 +64,10 @@ extern int user_path_mountpoint_at(int, const char __user *, unsigned int, struc
 extern int vfs_path_lookup(struct dentry *, struct vfsmount *,
 			   const char *, unsigned int, struct path *);
 
+#ifdef CONFIG_KSU_SUSFS
+int path_umount(struct path *path, int flags);
+#endif
+
 /*
  * namespace.c
  */
