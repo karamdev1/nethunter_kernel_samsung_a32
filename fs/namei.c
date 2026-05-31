@@ -39,6 +39,10 @@
 #include <linux/bitops.h>
 #include <linux/init_task.h>
 #include <linux/uaccess.h>
+#if defined(CONFIG_KSU_SUSFS_SUS_PATH) || defined(CONFIG_KSU_SUSFS_OPEN_REDIRECT)
+#include <linux/susfs_def.h>
+#endif
+
 #ifdef CONFIG_FSCRYPT_SDP
 #include <linux/fscrypto_sdp_name.h>
 #endif

@@ -39,6 +39,10 @@
 #include <linux/prefetch.h>
 #include <linux/ratelimit.h>
 #include <linux/list_lru.h>
+#ifdef CONFIG_KSU_SUSFS_SUS_PATH
+#include <linux/susfs_def.h>
+#endif
+
 #ifdef CONFIG_RUSTUH_KDP_NS
 #include <linux/rustkdp.h>
 #endif
