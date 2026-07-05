@@ -139,7 +139,7 @@ while true; do
 					echo -e "$BOLDRED[-] Coping Building Failed (exit code: $ret)$ENDCOLOR"
 				fi
 			fi
-			;;s
+			;;
 		5)
 			echo -e "$BOLDGREEN[+] Cleaning$ENDCOLOR"
 			rm -rf out_modules
