@@ -139,11 +139,11 @@ while true; do
 					echo -e "$BOLDRED[-] Coping Building Failed (exit code: $ret)$ENDCOLOR"
 				fi
 			fi
-			;;
+			;;s
 		5)
 			echo -e "$BOLDGREEN[+] Cleaning$ENDCOLOR"
 			rm -rf out_modules
-			make -s -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y clean -j"$(nproc)" && make -s -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y mrproper -j"$(nproc)" && make -s -C "$KDIR" O="$KDIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y clean -j"$(nproc)" && make -s -C "$KDIR" O="$KDIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y mrproper -j"$(nproc)"
+			make -s -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y clean -j"$(nproc)" && make -s -C "$KDIR" O="$OUT_DIR" KCFLAGS="$KCFLAGS" CONFIG_SECTION_MISMATCH_WARN_ONLY=y mrproper -j"$(nproc)"
 			ret=$?
 			if [ $ret -eq 0 ]; then
 				echo -e "$BOLDGREEN[+] Cleaning Succeed$ENDCOLOR"
