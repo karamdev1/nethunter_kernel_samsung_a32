@@ -34,6 +34,10 @@ CLANG_SRC="https://kali.download/nethunter-images/toolchains/google_clang-10.0.4
 CLANG_SRC_TYPE="wget"
 # And it's path
 export CLANG_ROOT=${TD}/clang-10.0
+export CLANG_PATH=${CLANG_ROOT}/bin
+export PATH=${CLANG_PATH}:${PATH}
+export LD_LIBRARY_PATH=${CLANG_ROOT}/lib64:$LD_LIBRARY_PATH
+export CLANG_TRIPLE=aarch64-linux-gnu-
 
 ### Recommended arm compiler
 # GCC 32bit (arm) source

@@ -1,0 +1,60 @@
+From 819b81a75c9eb687055fef83d6be72f6198667ce Mon Sep 17 00:00:00 2001
+From: ShorterKing <automobilehacks@gmail.com>
+Date: Fri, 17 Apr 2026 19:10:37 +0000
+Subject: [PATCH] staging: prima: avoid oops on external USB WiFi disconnect
+
+The __hdd_netdev_notifier_call() notifier is invoked for all
+net_device instances, not only those owned by the prima driver.
+
+Existing checks rely on interface naming ("wlan"/"p2p") and
+ieee80211_ptr, which allows unrelated devices such as USB WiFi
+adapters (e.g. mt7601u) to pass validation. This results in
+netdev_priv being incorrectly interpreted as a prima
+hdd_adapter_t.
+
+During device disconnect, the net_device private data may already
+be freed (LIST_POISON), leading to a kernel oops when accessed:
+
+  Unable to handle kernel paging request at virtual address dead...
+  pc : hdd_netdev_notifier_call+0x70/0x154
+
+Fix this by validating the adapter magic before dereferencing.
+If the magic does not match WLAN_HDD_ADAPTER_MAGIC, ignore the
+device.
+
+This prevents invalid access to foreign net_device instances and
+avoids crashes on USB WiFi disconnect.
+
+Signed-off-by: ShorterKing <automobilehacks@gmail.com>
+---
+ drivers/staging/prima/CORE/HDD/src/wlan_hdd_main.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/staging/prima/CORE/HDD/src/wlan_hdd_main.c b/drivers/staging/prima/CORE/HDD/src/wlan_hdd_main.c
+index 751178285..4fbf1fca2 100644
+--- a/drivers/staging/prima/CORE/HDD/src/wlan_hdd_main.c
++++ b/drivers/staging/prima/CORE/HDD/src/wlan_hdd_main.c
+@@ -357,6 +357,20 @@ static int __hdd_netdev_notifier_call(struct notifier_block * nb,
+       return NOTIFY_DONE;
+    }
+ 
++   /* Verify this net_device actually belongs to prima.
++    * Other drivers (e.g. mt7601u) also name their interfaces "wlan*" and
++    * set ieee80211_ptr, so they pass the guards above. Their netdev_priv
++    * is not a prima hdd_adapter_t and must not be dereferenced as one.
++    * On disconnect the private data may already be freed (LIST_POISON),
++    * causing a kernel oops at the pHddCtx dereference below.
++    */
++   if (pAdapter->magic != WLAN_HDD_ADAPTER_MAGIC)
++   {
++      hddLog(VOS_TRACE_LEVEL_INFO,"%s: magic mismatch, ignoring non-prima dev %s",
++             __func__, dev->name);
++      return NOTIFY_DONE;
++   }
++
+    pHddCtx = WLAN_HDD_GET_CTX(pAdapter);
+    if (NULL == pHddCtx)
+    {
+-- 
+2.43.0
+
