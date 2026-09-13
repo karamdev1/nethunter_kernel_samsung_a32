@@ -78,8 +78,6 @@ case $SECTION_MISMATCH_WARN_ONLY in
 		BUILDER_ENV_2="CONFIG_SECTION_MISMATCH=y"
 		;;
 	n)
-		export CONFIG_SECTION_MISMATCH=n
-		export CONFIG_SECTION_MISMATCH_WARN_ONLY=n
 		BUILDER_ENV_2=""
 		;;
 esac
@@ -88,6 +86,7 @@ MODULES_OUT_DIR=$MODULES_OUT_DIR
 KDIR=$(pwd)
 
 function show_gui() {
+	CCVersion=$($CC --version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n1)
 	if [ -f "$KDIR/$OUT_DIR/.config" ]; then
 		CONFIG_STATUS="${BOLDGREEN}Config present$ENDCOLOR"
 	else
@@ -98,10 +97,15 @@ function show_gui() {
 	figlet Kernel Builder
 	echo -e "\e[0m"
 	echo -e "${BOLDGREEN}By: ${BOLDYELLOW}Karam (karamdev1)$ENDCOLOR"
-	echo -e "${BOLDGREEN}Version: ${BOLDYELLOW}v1.1$ENDCOLOR"
+	echo -e "${BOLDGREEN}Version: ${BOLDYELLOW}v2$ENDCOLOR"
 	echo
 	echo -e "${BOLDGREEN}ARCH: $BOLDYELLOW${ARCH}$ENDCOLOR"
-	echo -e "${BOLDGREEN}CC Version: ${BOLDYELLOW}N/A$ENDCOLOR"
+	echo -e "${BOLDGREEN}CC Version: ${BOLDYELLOW}$CCVersion$ENDCOLOR"
+	echo -e "${BOLDGREEN}CLANG_TRIPLE: ${BOLDYELLOW}$(basename $CLANG_TRIPLE)$ENDCOLOR"
+	echo -e "${BOLDGREEN}CROSS_COMPILE: ${BOLDYELLOW}$(basename $CROSS_COMPILE)$ENDCOLOR"
+	if [[ $CROSS_COMPILE_ARM32 ]] then
+		echo -e "${BOLDGREEN}CROSS_COMPILE_ARM32: ${BOLDYELLOW}$(basename $CROSS_COMPILE_ARM32)$ENDCOLOR"
+	fi
 	echo -e "${BOLDGREEN}Kernel Config: ${CONFIG_STATUS}$ENDCOLOR"
 	echo
 	echo -e "$BOLDGREEN|-----------------------------------------------------|$ENDCOLOR"
